@@ -182,11 +182,22 @@ describe('GET /api/users/current', function(){
   afterEach(async () =>{
     await removeTestUser();
   });
-
+  
   it('should can get users information', async () =>{
+    const login = await supertest(web)
+    .post('/api/users/login')
+    .send({
+      email : "hanyatester@gmail.com",
+      password : "K5gb#mpg",
+    });
+    
+    expect(login.status).toBe(200);
+    expect(login.body.data.token).toBeDefined();
+    expect(login.body.data.token).not.toBe("");
+
     const result = await supertest(web)
       .get('/api/users/current')
-      .set('Authorization', 'test')
+      .set('Authorization', `Bearer ${login.body.data.token}`)
     
     logger.info(result.body);
     expect(result.status).toBe(200);
@@ -207,7 +218,8 @@ describe('GET /api/users/current', function(){
       .get('/api/users/current')
       .set('Authorization', 'testing')
     
-    logger.info(result.body);
+    // logger.info(result.body);
+    console.log(result.body);
     
     expect(result.status).toBe(401);
     expect(result.body.errors).toBeDefined;
@@ -239,7 +251,7 @@ describe('PUT /api/users/current/updateUserDetail', function(){
     
     const update = await supertest(web)
       .put('/api/users/current/updateUserDetail')
-      .set('Authorization', login.body.data.token)
+      .set('Authorization', `Bearer ${login.body.data.token}`)
       .send({
         name : "John Doe",
         birthDate : 19,
@@ -301,7 +313,7 @@ describe('PUT /api/users/current/changePassword', function(){
     
     const update = await supertest(web)
       .put('/api/users/current/changePassword')
-      .set('Authorization', login.body.data.token)
+      .set('Authorization',`Bearer ${login.body.data.token}`)
       .send({
         currentPassword : "K5gb#mpg",
         newPassword :  "M5gb#mpg",

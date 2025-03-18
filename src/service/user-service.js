@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import {validate} from "../validation/validation.js"
 import {
   getUserValidation,
@@ -10,6 +12,7 @@ import { prismaClient } from "../application/database.js"
 import { ResponseError } from "../error/response-error.js";
 import bcrypt from "bcrypt";
 import {v4 as uuid} from "uuid";
+import jwt from "jsonwebtoken";
 
 const register = async(request) => {
   const user = validate(registerUserValidation, request);
@@ -34,16 +37,30 @@ const register = async(request) => {
   })
 };
 
+const generateAccessToken = (payload) =>{
+  
+  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn : '14d' });
+}
+
+const refreshToken = async (request) =>{
+  const accessToken = generateAccessToken({
+    email : request.email,
+    role : request.role,
+  })
+    
+  return accessToken
+}
+
 const login = async(request) => {
   const loginRequest = validate(loginUserValidation, request);
-  console.log(loginRequest)
   const user = await prismaClient.user.findUnique({
     where:{
       email : loginRequest.email
     },
     select:{
       email : true,
-      password : true
+      password : true,
+      role :true,
     }
   });
 
@@ -56,19 +73,27 @@ const login = async(request) => {
     throw new ResponseError(401, "email or password is wrong");
   }
 
-  const token = uuid().toString();
+  const payload = {
+    email : user.email,
+    role : user.role,
+  };
 
-  return prismaClient.user.update({
+  const accessToken = generateAccessToken(payload)
+  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
+
+  await prismaClient.user.update({
     data:{
-      token: token
+      token: refreshToken
     },
     where:{
       email: user.email
-    },
-    select:{
-      token:true,
     }
   })
+ 
+  return {
+    accesToken : accessToken,
+    refreshToken : refreshToken,
+  }
 };
 
 const get = async (email) => {
@@ -174,4 +199,5 @@ export default{
   get,
   update,
   changePassword,
+  refreshToken,
 }

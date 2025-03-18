@@ -31,7 +31,7 @@ const registerUserValidation = Joi.object({
   birthYear : Joi.number().integer().required(),
   gender : Joi.string().valid('MALE', 'FEMALE').required(),
   phone : Joi.string().max(13).required(),
-  token : Joi.string()
+
 });
 
 const loginUserValidation = Joi.object({
@@ -51,6 +51,8 @@ const loginUserValidation = Joi.object({
       "string.pattern.base" : "Password should contain uppercase, number, and special character",
     }),
 })
+
+const refreshTokenValidation = Joi.string().required()
 
 const getUserValidation = Joi.string().max(100).required()
 
@@ -96,4 +98,5 @@ export{
   getUserValidation,
   updateUserValidation,
   updatePasswordValidation,
+  refreshTokenValidation,
 }
