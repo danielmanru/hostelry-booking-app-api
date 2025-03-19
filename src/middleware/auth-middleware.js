@@ -1,10 +1,15 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
+import { tokenValidation } from '../validation/user-validation';
 dotenv.config();
 
 export const authMiddleware = async (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
+  let token = req.headers['authorization']?.split(' ')[1];
   
+  if (token instanceof req.query) token = req.query.token?.split(' ')[1]; 
+
+  token = validate(tokenValidation, token);
+
   if(token == null){
     return res.status(401).json({
       errors : 'Unauthorized'
@@ -13,7 +18,7 @@ export const authMiddleware = async (req, res, next) => {
 
   let verifyToken = process.env.ACCESS_TOKEN_SECRET
 
-  if (req.body.tokenType === "refresh-token"){
+  if (req.query.tokenType === "refresh-token"){
     verifyToken = process.env.REFRESH_TOKEN_SECRET
   }
   

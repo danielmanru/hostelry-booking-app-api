@@ -13,6 +13,9 @@ import { ResponseError } from "../error/response-error.js";
 import bcrypt from "bcrypt";
 import {v4 as uuid} from "uuid";
 import jwt from "jsonwebtoken";
+import { getEmailHtml, sendEmail } from '../lib/mailer.js';
+
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, API_URI } = process.env;
 
 const register = async(request) => {
   const user = validate(registerUserValidation, request);
@@ -28,6 +31,11 @@ const register = async(request) => {
 
   user.password = await bcrypt.hash(user.password, 10);
 
+  const verifyToken = jwt.sign( { email }, ACCESS_TOKEN_SECRET, { expiresIn : '300s' })
+  const verifyLink = `${API_URI}/users/verify-user?token=${verifyToken}`
+  const emailTemplate = await getEmailHtml('verification-email.ejs', { link : verifyLink})
+  const sendEmail = sendEmail(user.email, 'Verify your email', emailTemplate)
+
   return prismaClient.user.create({
     data: user,
     select:{
@@ -37,12 +45,44 @@ const register = async(request) => {
   })
 };
 
-const generateAccessToken = (payload) =>{
-  
-  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn : '14d' });
+const verifyUser = async (request) => {
+  const { email } = request.user;
+  const user = await prismaClient.user.findUnique({
+    where:{
+      email : email,
+    },
+    select : {
+      email :true,
+      isVerified :true,
+    }
+  });
+    
+  if (user != 1) {
+    throw new ResponseError(404, 'User is not found!');
+  }
+
+  if (user.isVerified === "TRUE") {
+    throw new ResponseError(400, ' Your email have been verified.');
+  }
+
+  await prismaClient.user.update({
+    data : {
+      isVerified : "TRUE"
+    },
+    where : {
+      email : email
+    }
+  })
+
+  return { message : 'Your email have been verified' }
 }
 
-const refreshToken = async (request) =>{
+const generateAccessToken = (payload) =>{
+  
+  return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn : '14d' });
+}
+
+const refreshToken = async (request) => {
   const accessToken = generateAccessToken({
     email : request.email,
     role : request.role,
@@ -79,7 +119,7 @@ const login = async(request) => {
   };
 
   const accessToken = generateAccessToken(payload)
-  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
+  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET)
 
   await prismaClient.user.update({
     data:{
@@ -151,6 +191,33 @@ const update = async (request) => {
   })
 }
 
+const forgetPassword = async (request) => {
+  const email = validate(forgetPasswordValidation, request)
+  const user = await prismaClient.user.findUnique({
+    where : {
+      email : email
+    },
+    select : {
+      name : true
+    }
+  });
+
+  if (!user) {
+    throw new ResponseError(400, 'User is not found!')
+  }
+
+  const resetPasswordToken = jwt.sign({email : email}, ACCESS_TOKEN_SECRET, {expiresIn : "600s" })
+  const resetPasswordLink = `${API_URI}/users/forgetPassword?token=${resetPasswordToken}`;
+  const emailTemplate = await getEmailHtml('reset-password.ejs', {
+    name : user.name,
+    link : resetPasswordLink
+  })
+  
+  await sendEmail(email, "Reset Your Password", emailTemplate);
+
+  return { message : 'Reset password email have been sended' }
+}
+
 const changePassword = async (request) => {
   const changePasswordRequest = validate(updatePasswordValidation, request.body);
   const user = await prismaClient.user.findUnique({
@@ -200,4 +267,6 @@ export default{
   update,
   changePassword,
   refreshToken,
+  verifyUser,
+  forgetPassword,
 }

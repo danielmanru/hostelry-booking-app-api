@@ -24,20 +24,26 @@ enum Gender{
   FEMALE
 }
 
+enum IsVerified{
+  TRUE
+  FALSE
+}
+
 model User {
-  id          Int       @id @default(autoincrement())
-  email       String    @db.VarChar(100) @unique
-  password    String    @db.VarChar(100)
-  name        String    @db.VarChar(100)
+  id          Int         @id @default(autoincrement())
+  email       String      @db.VarChar(100) @unique
+  password    String      @db.VarChar(100)
+  name        String      @db.VarChar(100)
   birthDate   Int  
   birthMonth  Int  
   birthYear   Int 
-  gender      Gender    @default(MALE)
-  phone       String    @db.VarChar(100)
-  role        Role      @default(GUEST)
-  token       String?   @db.VarChar(256)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  gender      Gender      @default(MALE)
+  phone       String      @db.VarChar(100)
+  role        Role        @default(GUEST)
+  token       String?     @db.VarChar(256)
+  isVerified  IsVerified  @default(FALSE)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
   properties  Property[]
   bookings Booking[]
   payments Payment[]

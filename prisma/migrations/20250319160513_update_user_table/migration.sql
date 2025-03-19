@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `users` ADD COLUMN `isVerified` ENUM('TRUE', 'FALSE') NOT NULL DEFAULT 'FALSE';

@@ -11,7 +11,7 @@ describe('POST  /api/users', function () {
 
   it('should can register new user', async () =>{
     const result = await supertest(web)
-      .post('/api/users')
+      .post('/api/users/register')
       .send({
         email : "hanyatester@gmail.com",
         password : "K5gb#mpg",
@@ -40,7 +40,7 @@ describe('POST  /api/users', function () {
 
   it('should reject if request is invalid', async () =>{
     const result = await supertest(web)
-      .post('/api/users')
+      .post('/api/users/register')
       .send({
         email : "hanyatestergmail.com",
         password : "klendestin",
@@ -61,7 +61,7 @@ describe('POST  /api/users', function () {
 
   it('should reject if email already registered', async () =>{
     let result = await supertest(web)
-      .post('/api/users')
+      .post('/api/users/register')
       .send({
         email : "hanyatester@gmail.com",
         password : "K5gb#mpg",
@@ -87,7 +87,7 @@ describe('POST  /api/users', function () {
     expect(result.body.data.token).toBeUndefined();
     
     result = await supertest(web)
-      .post('/api/users')
+      .post('/api/users/register')
       .send({
         email : "hanyatester@gmail.com",
         password : "K5gb#mpg",
