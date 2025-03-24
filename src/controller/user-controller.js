@@ -1,7 +1,4 @@
-import { verify } from "jsonwebtoken";
 import userService from "../service/user-service.js";
-import { forgetPasswordValidation, tokenValidation } from "../validation/user-validation.js";
-import {validate} from "../validation/validation.js"
 
 const register = async (req, res, next) => {
   try{
@@ -14,9 +11,21 @@ const register = async (req, res, next) => {
   }
 };
 
+const sendVerificationEmail = async(req, res, next) => {
+  try{
+    const result = await userService.sendVerificationEmail(req.user);
+
+    res.status(200).json({
+      data : result
+    })
+  } catch(e) {
+    next(e);
+  }
+}
+
 const verifyUser = async(req, res,next) => {
   try{
-    const result = await userService.verifyUser(req.user);
+    const result = await userService.verifyUser(req);
     
     res.status(200).json({
       data : result
@@ -72,6 +81,20 @@ const update = async (req, res, next) => {
   };
 };
 
+const changePassword = async (req, res, next) => {
+  try{
+    const result = await userService.changePassword(req);
+    res.status(200).json({
+      status : 'SUCCESS',
+      data : {
+        refreshToken : result.token
+      }
+    });
+  } catch(e) {
+    next(e);
+  };
+};
+
 const forgetPassword = async (req, res, next) => {
   try{
     const result = await userService.forgetPassword(req.body);
@@ -84,16 +107,29 @@ const forgetPassword = async (req, res, next) => {
   };
 };
 
-const changePassword = async (req, res, next) => {
+const resetPassword = async (req, res, next) => {
   try{
-    const result = await userService.changePassword(req.body);
+    const result = await userService.resetPassword(req);
     res.status(200).json({
-      data : result
+      data : result,
+      message : "Password has been reset"
     });
-  }catch(e){
+  } catch(e) {
+    next(e)
+  }
+}
+
+const logout = async (req, res, next) => {
+  try{
+    const result = await userService.logout(req.user);
+    res.status(200).json({
+      data : result,
+      message : "User has logged out"
+    })
+  } catch (e) {
     next(e);
-  };
-};
+  }
+}
 
 export default{
   register,
@@ -104,4 +140,7 @@ export default{
   refreshToken,
   verifyUser,
   forgetPassword,
+  resetPassword,
+  sendVerificationEmail,
+  logout,
 }

@@ -2,16 +2,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 import {validate} from "../validation/validation.js"
 import {
+  changePasswordValidation,
   getUserValidation,
   loginUserValidation, 
   registerUserValidation,
-  updatePasswordValidation,
-  updateUserValidation
+  resetPasswordValidation,
+  updateUserValidation,
+  forgetPasswordValidation,
 } from "../validation/user-validation.js"
 import { prismaClient } from "../application/database.js"
 import { ResponseError } from "../error/response-error.js";
 import bcrypt from "bcrypt";
-import {v4 as uuid} from "uuid";
 import jwt from "jsonwebtoken";
 import { getEmailHtml, sendEmail } from '../lib/mailer.js';
 
@@ -31,10 +32,11 @@ const register = async(request) => {
 
   user.password = await bcrypt.hash(user.password, 10);
 
-  const verifyToken = jwt.sign( { email }, ACCESS_TOKEN_SECRET, { expiresIn : '300s' })
-  const verifyLink = `${API_URI}/users/verify-user?token=${verifyToken}`
-  const emailTemplate = await getEmailHtml('verification-email.ejs', { link : verifyLink})
-  const sendEmail = sendEmail(user.email, 'Verify your email', emailTemplate)
+  const verificationToken = jwt.sign( { email : user.email }, ACCESS_TOKEN_SECRET, { expiresIn : '1h' })
+  const verificationLink = `${API_URI}/users/verifyUser?token=${verificationToken}`
+  const emailTemplate = await getEmailHtml('verification-email.ejs', { link : verificationLink})
+
+  sendEmail(user.email, 'Verify your email', emailTemplate)
 
   return prismaClient.user.create({
     data: user,
@@ -45,6 +47,19 @@ const register = async(request) => {
   })
 };
 
+const sendVerificationEmail =  async (request) => {
+  const verificationToken = jwt.sign( { email : request.email }, ACCESS_TOKEN_SECRET, { expiresIn : '1h' })
+  const verificationLink = `${API_URI}/users/verifyUser?token=${verificationToken}`
+  const emailTemplate = await getEmailHtml('verification-email.ejs', { link : verificationLink})
+
+  sendEmail(request.email, 'Verify your email', emailTemplate)
+
+  return {
+    status : "PENDING",
+    message : "An verification email is being sent to your email!"
+  }
+}
+
 const verifyUser = async (request) => {
   const { email } = request.user;
   const user = await prismaClient.user.findUnique({
@@ -53,33 +68,36 @@ const verifyUser = async (request) => {
     },
     select : {
       email :true,
-      isVerified :true,
+      isVerified:true,
+      
     }
   });
     
-  if (user != 1) {
+  if (!user) {
     throw new ResponseError(404, 'User is not found!');
   }
 
   if (user.isVerified === "TRUE") {
-    throw new ResponseError(400, ' Your email have been verified.');
+    throw new ResponseError(400, 'Your email have been verified.');
   }
 
-  await prismaClient.user.update({
+  return prismaClient.user.update({
     data : {
       isVerified : "TRUE"
     },
     where : {
       email : email
+    },
+    select : {
+      email : true,
+      isVerified : true
     }
   })
-
-  return { message : 'Your email have been verified' }
 }
 
 const generateAccessToken = (payload) =>{
   
-  return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn : '14d' });
+  return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn : '1d' });
 }
 
 const refreshToken = async (request) => {
@@ -119,11 +137,11 @@ const login = async(request) => {
   };
 
   const accessToken = generateAccessToken(payload)
-  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET)
+  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn : "7d" })
 
   await prismaClient.user.update({
     data:{
-      token: refreshToken
+      refreshToken: refreshToken
     },
     where:{
       email: user.email
@@ -155,11 +173,11 @@ const get = async (email) => {
   });
 
   if (!user){
-    throw new ResponseError(404, "user is not found")
-  }
+    throw new ResponseError(404, "user is not found");
+  };
 
   return user;
-}
+};
 
 const update = async (request) => {
   const updateRequest = validate(updateUserValidation, request.body);
@@ -168,11 +186,11 @@ const update = async (request) => {
     where:{
       email : request.user.email,
     }
-  })
+  });
 
   if(searchUser != 1){
     throw new ResponseError(404, "User is not found");
-  }
+  };
 
   return prismaClient.user.update({
     data: updateRequest,
@@ -188,38 +206,73 @@ const update = async (request) => {
       gender : true,
       phone :true,
     }
-  })
-}
+  });
+};
 
 const forgetPassword = async (request) => {
-  const email = validate(forgetPasswordValidation, request)
+  const forgetPasswordRequest = validate(forgetPasswordValidation, request);
   const user = await prismaClient.user.findUnique({
     where : {
-      email : email
+      email : forgetPasswordRequest.email
     },
     select : {
-      name : true
+      email : true
     }
   });
 
   if (!user) {
     throw new ResponseError(400, 'User is not found!')
-  }
+  };
 
-  const resetPasswordToken = jwt.sign({email : email}, ACCESS_TOKEN_SECRET, {expiresIn : "600s" })
-  const resetPasswordLink = `${API_URI}/users/forgetPassword?token=${resetPasswordToken}`;
+  const resetPasswordToken = jwt.sign({email : user.email}, ACCESS_TOKEN_SECRET, {expiresIn : "300s" })
+  const resetPasswordLink = `${API_URI}/users/resetPassword?token=${resetPasswordToken}`;
   const emailTemplate = await getEmailHtml('reset-password.ejs', {
     name : user.name,
     link : resetPasswordLink
-  })
+  });
   
-  await sendEmail(email, "Reset Your Password", emailTemplate);
+  sendEmail(user.email, "Reset Your Password", emailTemplate);
 
-  return { message : 'Reset password email have been sended' }
-}
+  return {
+    status : "PENDING",
+    message : "A reset password link is being sent to your email!"
+  }
+};
+
+const resetPassword = async (request) => {
+  const resetPasswordRequest = validate(resetPasswordValidation, request.body);
+  
+  const user = await prismaClient.user.count({
+    where : {
+      email : request.user.email
+    }
+  });
+
+  if (user != 1) {
+    throw new ResponseError(404, 'User is not found!');
+  };
+
+  if(resetPasswordRequest.newPassword !== resetPasswordRequest.confirmNewPassword){
+      throw new ResponseError(401, "New password and confirm password is different!");
+  };
+  
+  const newPassword = await bcrypt.hash(resetPasswordRequest.newPassword, 10);
+
+  return prismaClient.user.update({
+    data : {
+      password : newPassword
+    },
+    where : {
+      email : request.user.email
+    },
+    select : {
+      email : true
+    }
+  });
+};
 
 const changePassword = async (request) => {
-  const changePasswordRequest = validate(updatePasswordValidation, request.body);
+  const changePasswordRequest = validate(changePasswordValidation, request.body);
   const user = await prismaClient.user.findUnique({
     where:{
       email : request.user.email,
@@ -227,38 +280,67 @@ const changePassword = async (request) => {
     select : {
       email :true,
       password :true,
+      role : true
     }
-  })
+  });
   
   if(!user){
     throw new ResponseError(404, "User is not found");
-  }
+  };
 
-  if(changePasswordRequest.currentPassword && changePasswordRequest.newPassword){
+  if (changePasswordRequest.currentPassword && changePasswordRequest.newPassword) {
     const isPasswordValid = await bcrypt.compare(changePasswordRequest.currentPassword, user.password);
     if(!isPasswordValid){
       throw new ResponseError(401, "password is wrong");
-    }
-  }
+    };
+  };
 
   const newPassword = await bcrypt.hash(changePasswordRequest.newPassword, 10);
-  const token = uuid().toString();
+  
+  const payload = {
+    email : user.email,
+    role : user.role
+  };
+
+  const newRefreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET);
 
   return prismaClient.user.update({
     data:{
       password : newPassword,
-      token : token,
+      token : newRefreshToken,
     },
     where:{
       email: user.email
     },
     select:{
-      email: true,
-      name : true,
       token : true,
     }
-  })
-}
+  });
+};
+
+const logout = async (request) => {
+  const user = await prismaClient.user.count({
+    where:{
+      email : request.email,
+    },
+  });
+  
+  if(!user){
+    throw new ResponseError(404, "User is not found");
+  };
+
+  return prismaClient.user.update({
+    data : {
+      refreshToken : ""
+    },
+    where : {
+      email : request.email
+    },
+    select : {
+      email : true
+    }
+  });
+};
 
 export default{
   register,
@@ -269,4 +351,7 @@ export default{
   refreshToken,
   verifyUser,
   forgetPassword,
+  resetPassword,
+  sendVerificationEmail,
+  logout,
 }

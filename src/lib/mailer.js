@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
 import ejs from "ejs";
-import { ResponseError } from "../error/response-error";
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 const { 
   GOOGLE_CLIENT_ID,
@@ -17,8 +18,8 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials( { refresh_token : GMAIL_REFRESH_TOKEN } );
 
-const sendEmail = async (to, subject, html) => {
-  try{
+const sendEmail = (to, subject, html) => {
+  return new Promise(async(resolve, reject) => {
     const accessToken = await oAuth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
       service : 'gmail',
@@ -38,28 +39,30 @@ const sendEmail = async (to, subject, html) => {
       html,
     };
 
-    const response = await transport.sendMail(mailOptions)
+    await transport.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        reject(err);
+      }
 
-    return response;
-  } catch (err) {
-    next(err);
-  }
+      resolve(info);
+    })
+  })
 }
 
-const getEmailHtml = async (filename, data) => {
-  try{
-    const path = __dirname + '../views/email/' + filename;
+const getEmailHtml = (filename, data) => {
+  return new Promise(async (resolve, reject) =>{
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const filePath = path.join(__dirname, '/../views/email/', filename);
 
-    ejs.renderFIle(path, data, (err, data) => {
+    await ejs.renderFile(filePath, data, (err, data) => {
       if (err) {
-        throw new ResponseError(400, err);
+        reject(err);
       } 
 
-      return data;
+      resolve(data);
     })
-  } catch(err) {
-    next(err);
-  }
+  })
 };
 
 export {

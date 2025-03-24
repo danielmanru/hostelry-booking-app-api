@@ -73,7 +73,7 @@ const updateUserValidation = Joi.object({
   phone : Joi.string().max(13).required(),
 })
 
-const updatePasswordValidation = Joi.object({
+const changePasswordValidation = Joi.object({
   currentPassword : Joi.string()
     .min(8)
     .max(50)
@@ -83,6 +83,25 @@ const updatePasswordValidation = Joi.object({
       "string.pattern.base" : "Password should contain uppercase, number, and special character",
   }),
   newPassword : Joi.string()
+    .min(8)
+    .max(50)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]+$/)
+    .optional()
+    .messages({
+      "string.pattern.base" : "Password should contain uppercase, number, and special character",
+  }),
+});
+
+const resetPasswordValidation = Joi.object({
+  newPassword : Joi.string()
+    .min(8)
+    .max(50)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]+$/)
+    .optional()
+    .messages({
+      "string.pattern.base" : "Password should contain uppercase, number, and special character",
+  }),
+  confirmNewPassword : Joi.string()
     .min(8)
     .max(50)
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]+$/)
@@ -107,7 +126,8 @@ export{
   loginUserValidation,
   getUserValidation,
   updateUserValidation,
-  updatePasswordValidation,
+  changePasswordValidation,
   tokenValidation,
   forgetPasswordValidation,
+  resetPasswordValidation,
 }

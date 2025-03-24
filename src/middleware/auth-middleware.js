@@ -1,20 +1,19 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
-import { tokenValidation } from '../validation/user-validation';
+import { tokenValidation } from '../validation/user-validation.js';
+import {validate} from "../validation/validation.js"
 dotenv.config();
 
 export const authMiddleware = async (req, res, next) => {
-  let token = req.headers['authorization']?.split(' ')[1];
-  
-  if (token instanceof req.query) token = req.query.token?.split(' ')[1]; 
+  let token = req.headers['authorization']?.split(' ')[1] || req.query.token;
 
-  token = validate(tokenValidation, token);
-
-  if(token == null){
+  if (token == null) {
     return res.status(401).json({
       errors : 'Unauthorized'
     });
   }
+
+  token =  validate(tokenValidation, token)
 
   let verifyToken = process.env.ACCESS_TOKEN_SECRET
 
@@ -24,12 +23,11 @@ export const authMiddleware = async (req, res, next) => {
   
   jwt.verify(token, verifyToken, (err, user) =>{
     if (err){
-      console.log(err)
       return res.status(403).json({
         errors : err
       })
-      
     }
+
     req.user = user;
     next();
   })
