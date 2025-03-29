@@ -1,9 +1,10 @@
 import express from "express";
 import userController from "../controller/user-controller.js";
 import { authMiddleware } from "../middleware/auth-middleware.js";
+import { roles } from "../utils/roles.js";
 
 const userRouter = new express.Router();
-userRouter.use(authMiddleware)
+userRouter.use(authMiddleware())
 userRouter.get('/api/users/current', userController.get)
 userRouter.get('/api/users/current/sendVerificationEmail', userController.sendVerificationEmail)
 userRouter.get('/api/users/verifyUser', userController.verifyUser)

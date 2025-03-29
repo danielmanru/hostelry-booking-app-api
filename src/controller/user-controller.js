@@ -39,7 +39,7 @@ const login = async(req, res, next) => {
   try{
     const result = await userService.login(req.body);
     res.status(200).json({
-      data : result
+      data : result,
     })
   }catch(e){
     next(e)
@@ -62,7 +62,8 @@ const get = async (req, res, next) => {
     const email =  req.user.email;
     const result = await userService.get(email);
     res.status(200).json({
-      data : result
+      data : result,
+      message : `login as ${req.user.role}`
     });
   }catch(e){
     next(e);
