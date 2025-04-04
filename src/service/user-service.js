@@ -329,7 +329,7 @@ const logout = async (request) => {
     throw new ResponseError(404, "User is not found");
   };
 
-  return prismaClient.user.update({
+  await prismaClient.user.update({
     data : {
       refreshToken : ""
     },
@@ -340,6 +340,10 @@ const logout = async (request) => {
       email : true
     }
   });
+
+  return {
+    data : {}
+  }
 };
 
 export default{
