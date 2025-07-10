@@ -5,7 +5,7 @@ import com.daytoday.hostelrybooking.model.User;
 import lombok.Data;
 
 @Data
-public class CreatePropertyRequest {
+public class AddPropertyRequest {
     private Long id;
     private User owner;
     private String name;

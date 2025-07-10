@@ -3,7 +3,7 @@ package com.daytoday.hostelrybooking.controller;
 import com.daytoday.hostelrybooking.dto.PropertyDto;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Property;
-import com.daytoday.hostelrybooking.request.CreatePropertyRequest;
+import com.daytoday.hostelrybooking.request.AddPropertyRequest;
 import com.daytoday.hostelrybooking.request.UpdatePropertyRequest;
 import com.daytoday.hostelrybooking.response.ApiResponse;
 import com.daytoday.hostelrybooking.service.property.IPropertyService;
@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class PropertyController {
     private final IPropertyService propertyService;
 
-    @GetMapping("property/{propertyId}/property")
+    @GetMapping("/property/{propertyId}/property")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long propertyId) {
         try {
             Property property = propertyService.getPropertyById(propertyId);
@@ -33,7 +33,7 @@ public class PropertyController {
         }
     }
 
-    @GetMapping("user/{userId}/properties")
+    @GetMapping("/user/{userId}/properties")
     public ResponseEntity<ApiResponse> getUserProperty(@PathVariable Long userId) {
         try {
             List<Property> properties = propertyService.getUserProperty(userId);
@@ -47,8 +47,8 @@ public class PropertyController {
         }
     }
 
-    @GetMapping("by/city")
-    public ResponseEntity<ApiResponse> getPropertyByCity(@RequestParam String city) {
+    @GetMapping("/by/city/{city}")
+    public ResponseEntity<ApiResponse> getPropertyByCity(@PathVariable String city) {
         try {
             List<Property> properties = propertyService.getPropertyByCity(city);
             if (properties.isEmpty()) {
@@ -61,8 +61,8 @@ public class PropertyController {
         }
     }
 
-    @GetMapping("by/country")
-    public ResponseEntity<ApiResponse> getPropertyByCountry(@RequestParam String country) {
+    @GetMapping("/by/country/{country}")
+    public ResponseEntity<ApiResponse> getPropertyByCountry(@PathVariable String country) {
         try {
             List<Property> properties = propertyService.getPropertyByCity(country);
             if (properties.isEmpty()) {
@@ -76,7 +76,7 @@ public class PropertyController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addProperty(@RequestBody CreatePropertyRequest request) {
+    public ResponseEntity<ApiResponse> addProperty(@RequestBody AddPropertyRequest request) {
         try {
             Property property = propertyService.addProperty(request);
             PropertyDto propertyDto = propertyService.convertDto(property);
@@ -93,7 +93,7 @@ public class PropertyController {
             PropertyDto propertyDto = propertyService.convertDto(property);
             return ResponseEntity.ok(new ApiResponse("Update Property Success", propertyDto));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

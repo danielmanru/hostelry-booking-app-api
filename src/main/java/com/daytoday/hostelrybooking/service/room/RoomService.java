@@ -5,9 +5,9 @@ import com.daytoday.hostelrybooking.dto.RoomDto;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Amenity;
 import com.daytoday.hostelrybooking.model.Image;
-import com.daytoday.hostelrybooking.model.Property;
 import com.daytoday.hostelrybooking.model.Room;
 import com.daytoday.hostelrybooking.repository.AmenityRepository;
+import com.daytoday.hostelrybooking.repository.ImageRepository;
 import com.daytoday.hostelrybooking.repository.PropertyRepository;
 import com.daytoday.hostelrybooking.repository.RoomRepository;
 import com.daytoday.hostelrybooking.request.AddRoomRequest;
@@ -18,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,7 @@ public class RoomService implements IRoomService {
     private final PropertyRepository propertyRepository;
     private final AmenityRepository amenityRepository;
     private final RoomRepository roomRepository;
+    private final ImageRepository imageRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -99,10 +99,11 @@ public class RoomService implements IRoomService {
     @Override
     public RoomDto convertToDto(Room room) {
         RoomDto roomDto = modelMapper.map(room, RoomDto.class);
-        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<Image> images = imageRepository.findByRoomId(room.getId());
         List<ImageDto> imageDtos = images.stream()
                 .map(image -> modelMapper.map(image, ImageDto.class))
                 .toList();
         roomDto.setImages(imageDtos);
         return roomDto;
+    }
 }

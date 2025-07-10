@@ -56,6 +56,7 @@ public class ImageService implements IImageService {
                 image.setFilePublicId(result.get("public_id").toString());
                 image.setImageUrl(result.get("secure_url").toString());
                 image.setProperty(property);
+                image.setRoom(null);
                 Image savedImage = imageRepository.save(image);
                 savedImages.add(savedImage);
             } catch (IOException e) {
@@ -82,6 +83,7 @@ public class ImageService implements IImageService {
                 image.setFilePublicId(result.get("public_id").toString());
                 image.setImageUrl(result.get("secure_url").toString());
                 image.setRoom(room);
+                image.setProperty(null);
                 Image savedImage = imageRepository.save(image);
                 savedImages.add(savedImage);
             } catch (IOException e) {

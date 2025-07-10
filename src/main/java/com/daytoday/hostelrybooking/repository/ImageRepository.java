@@ -1,6 +1,5 @@
 package com.daytoday.hostelrybooking.repository;
 
-import com.daytoday.hostelrybooking.dto.ImageDto;
 import com.daytoday.hostelrybooking.model.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 

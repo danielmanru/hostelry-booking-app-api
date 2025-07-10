@@ -3,7 +3,7 @@ package com.daytoday.hostelrybooking.request;
 import lombok.Data;
 
 @Data
-public class UserUpdateRequest {
+public class UpdateUserRequest {
     private String firstName;
     private String lastName;
 }

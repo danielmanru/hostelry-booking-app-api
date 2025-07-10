@@ -3,7 +3,7 @@ package com.daytoday.hostelrybooking.request;
 import lombok.Data;
 
 @Data
-public class CreateUserRequest {
+public class AddUserRequest {
     private String firstName;
     private String lastName;
     private String email;

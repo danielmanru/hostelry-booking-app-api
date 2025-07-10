@@ -7,7 +7,7 @@ import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Image;
 import com.daytoday.hostelrybooking.model.Property;
 import com.daytoday.hostelrybooking.repository.PropertyRepository;
-import com.daytoday.hostelrybooking.request.CreatePropertyRequest;
+import com.daytoday.hostelrybooking.request.AddPropertyRequest;
 import com.daytoday.hostelrybooking.request.UpdatePropertyRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -43,11 +43,11 @@ public class PropertyService implements IPropertyService{
     }
 
     @Override
-    public Property addProperty(CreatePropertyRequest request) {
+    public Property addProperty(AddPropertyRequest request) {
         return propertyRepository.save(createProperty(request));
     }
 
-    private Property createProperty(CreatePropertyRequest request) {
+    private Property createProperty(AddPropertyRequest request) {
         return new Property(
                 request.getOwner(),
                 request.getName(),
@@ -94,8 +94,7 @@ public class PropertyService implements IPropertyService{
     @Override
     public PropertyDto convertDto(Property property) {
         PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
-        RoomDto roomDto = modelMapper.map(room, RoomDto.class);
-        List<Image> images = roomRepository.findByProductId(product.getId());
+        List<Image> images = propertyRepository.findByPropertyId(property.getId());
         List<ImageDto> imageDtos = images.stream()
                 .map(image -> modelMapper.map(image, ImageDto.class))
                 .toList();

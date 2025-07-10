@@ -18,8 +18,14 @@ public class Amenity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String category;
     private String name;
 
     @ManyToMany(mappedBy = "amenities")
     private List<Room> rooms;
+
+    public Amenity(String category, String name) {
+        this.category = category;
+        this.name = name;
+    }
 }

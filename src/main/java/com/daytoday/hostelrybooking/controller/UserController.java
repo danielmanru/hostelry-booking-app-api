@@ -3,8 +3,8 @@ package com.daytoday.hostelrybooking.controller;
 import com.daytoday.hostelrybooking.exeptions.AlreadyExistsException;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.User;
-import com.daytoday.hostelrybooking.request.CreateUserRequest;
-import com.daytoday.hostelrybooking.request.UserUpdateRequest;
+import com.daytoday.hostelrybooking.request.AddUserRequest;
+import com.daytoday.hostelrybooking.request.UpdateUserRequest;
 import com.daytoday.hostelrybooking.response.ApiResponse;
 import com.daytoday.hostelrybooking.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<ApiResponse> createUser(@RequestBody AddUserRequest request) {
         try {
             User user = userService.createUser(request);
             return ResponseEntity.status(CREATED).body(new ApiResponse("User created successfully", user));
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/update")
-    public ResponseEntity<ApiResponse> updateUser(@PathVariable UserUpdateRequest request, Long userId) {
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable UpdateUserRequest request, Long userId) {
         try {
             User user = userService.updateUser(request, userId);
             return ResponseEntity.ok(new ApiResponse("Update User Success", user));

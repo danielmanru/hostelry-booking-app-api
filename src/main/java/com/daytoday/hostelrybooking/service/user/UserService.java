@@ -4,8 +4,8 @@ import com.daytoday.hostelrybooking.exeptions.AlreadyExistsException;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.User;
 import com.daytoday.hostelrybooking.repository.UserRepository;
-import com.daytoday.hostelrybooking.request.CreateUserRequest;
-import com.daytoday.hostelrybooking.request.UserUpdateRequest;
+import com.daytoday.hostelrybooking.request.AddUserRequest;
+import com.daytoday.hostelrybooking.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User createUser(CreateUserRequest request) {
+    public User createUser(AddUserRequest request) {
         return Optional.of(request).filter(user -> !userRepository.existsByEmail(request.getEmail()))
                 .map(req -> {
                     User user = new User();
@@ -36,7 +36,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(UserUpdateRequest request, Long userId) {
+    public User updateUser(UpdateUserRequest request, Long userId) {
         return userRepository.findById(userId).map(existingUser -> {
             existingUser.setFirstName(request.getFirstName());
             existingUser.setLastName(request.getLastName());

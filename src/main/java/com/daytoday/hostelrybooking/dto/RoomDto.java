@@ -1,8 +1,6 @@
 package com.daytoday.hostelrybooking.dto;
 
 import com.daytoday.hostelrybooking.enums.BedTypeEnum;
-import com.daytoday.hostelrybooking.model.Amenity;
-import com.daytoday.hostelrybooking.model.Image;
 import lombok.Data;
 
 import java.math.BigDecimal;
