@@ -4,14 +4,15 @@ import com.daytoday.hostelrybooking.enums.PropertyTypeEnum;
 import com.daytoday.hostelrybooking.model.User;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class AddPropertyRequest {
-    private Long id;
-    private User owner;
+    private UUID id;
     private String name;
     private String description;
     private String address;
     private String city;
     private String country;
-    private PropertyTypeEnum type;
+    private String type;
 }

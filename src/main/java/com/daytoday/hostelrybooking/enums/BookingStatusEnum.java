@@ -1,8 +1,11 @@
 package com.daytoday.hostelrybooking.enums;
 
 public enum BookingStatusEnum {
-    PENDING,
-    CONFIRMED,
-    CANCELLED,
-    COMPLETED
+    INITIATED,
+    AWAITING_PAYMENT,
+    PAYMENT_RECEIVED,
+    CANCELED,
+    CHECKED_IN,
+    COMPLETED,
+    EXPIRED,
 }

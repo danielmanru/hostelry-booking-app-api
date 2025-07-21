@@ -1,6 +1,5 @@
 package com.daytoday.hostelrybooking.model;
 
-import com.daytoday.hostelrybooking.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,8 +16,8 @@ import java.util.List;
 @Entity
 public class User extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private String firstName;
     private String lastName;
@@ -33,8 +33,7 @@ public class User extends BaseEntity{
 
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    private UserRoleEnum role;
+    private String role;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Property> properties;

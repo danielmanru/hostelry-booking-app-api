@@ -2,6 +2,7 @@ package com.daytoday.hostelrybooking.service.room;
 
 import com.daytoday.hostelrybooking.dto.ImageDto;
 import com.daytoday.hostelrybooking.dto.RoomDto;
+import com.daytoday.hostelrybooking.enums.BedTypeEnum;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Amenity;
 import com.daytoday.hostelrybooking.model.Image;
@@ -18,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class RoomService implements IRoomService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Room addRoom(AddRoomRequest request, Long propertyId) {
+    public Room addRoom(AddRoomRequest request, UUID propertyId) {
         propertyRepository.findById(propertyId).ifPresentOrElse(request :: setProperty, () -> {throw new ResourceNotFoundException("Property with id " + propertyId + " not found!");});
 
         List<Amenity> amenities = amenityRepository.findAllById(request.getAmenityIds());
@@ -44,7 +46,7 @@ public class RoomService implements IRoomService {
                 request.getDescription(),
                 request.getMaxGuest(),
                 request.getPricePerNight(),
-                request.getBedType(),
+                BedTypeEnum.valueOf(request.getBedType()),
                 request.getUnitAvailable(),
                 request.getRoomSize(),
                 amenities
@@ -52,18 +54,18 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<Room> getRoomByPropertyId(Long propertyId) {
+    public List<Room> getRoomByPropertyId(UUID propertyId) {
         return roomRepository.findByPropertyId(propertyId);
     }
 
     @Override
-    public Room getRoomById(Long roomId) {
+    public Room getRoomById(UUID roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found!"));
     }
 
     @Override
-    public Room updateRoom(UpdateRoomRequest request, Long roomId) {
+    public Room updateRoom(UpdateRoomRequest request, UUID roomId) {
         List<Amenity> amenities = amenityRepository.findAllById(request.getAmenityIds());
         return roomRepository.findById(roomId)
                 .map(existingRoom -> updateExistingRoom(existingRoom, request, amenities))
@@ -85,7 +87,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void deleteRoomById(Long roomId) {
+    public void deleteRoomById(UUID roomId) {
         roomRepository.findById(roomId).ifPresentOrElse(roomRepository :: delete, () -> {
             throw new ResourceNotFoundException("Room not found!");
         });

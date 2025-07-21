@@ -2,34 +2,46 @@ package com.daytoday.hostelrybooking.service.property;
 
 import com.daytoday.hostelrybooking.dto.ImageDto;
 import com.daytoday.hostelrybooking.dto.PropertyDto;
-import com.daytoday.hostelrybooking.dto.RoomDto;
+import com.daytoday.hostelrybooking.enums.PropertyTypeEnum;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Image;
 import com.daytoday.hostelrybooking.model.Property;
+import com.daytoday.hostelrybooking.model.User;
+import com.daytoday.hostelrybooking.repository.ImageRepository;
 import com.daytoday.hostelrybooking.repository.PropertyRepository;
 import com.daytoday.hostelrybooking.request.AddPropertyRequest;
 import com.daytoday.hostelrybooking.request.UpdatePropertyRequest;
+import com.daytoday.hostelrybooking.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PropertyService implements IPropertyService{
     private final PropertyRepository propertyRepository;
     private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
+    private final IUserService userService;
 
     @Override
-    public Property getPropertyById(Long propertyId) {
+    public Property getPropertyById(UUID propertyId) {
         return propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
     }
 
     @Override
-    public List<Property> getUserProperty(Long userId) {
-        return propertyRepository.findByOwner(userId);
+    public List<Property> getUserProperty() {
+        User user = userService.getAuthenticatedUser();
+        return propertyRepository.findByOwnerId(user.getId());
+    }
+
+    @Override
+    public List<Property> getPropertyByUserId(UUID userId) {
+        return propertyRepository.findByOwnerId(userId);
     }
 
     @Override
@@ -44,23 +56,24 @@ public class PropertyService implements IPropertyService{
 
     @Override
     public Property addProperty(AddPropertyRequest request) {
-        return propertyRepository.save(createProperty(request));
+        User user = userService.getAuthenticatedUser();
+        return propertyRepository.save(createProperty(request, user));
     }
 
-    private Property createProperty(AddPropertyRequest request) {
+    private Property createProperty(AddPropertyRequest request, User user) {
         return new Property(
-                request.getOwner(),
+                user,
                 request.getName(),
                 request.getDescription(),
                 request.getAddress(),
                 request.getCity(),
                 request.getCountry(),
-                request.getType()
+                PropertyTypeEnum.valueOf(request.getType())
         );
     }
 
     @Override
-    public Property updateProperty(UpdatePropertyRequest request, Long propertyId) {
+    public Property updateProperty(UpdatePropertyRequest request, UUID propertyId) {
         return propertyRepository.findById(propertyId)
                 .map(existingProduct -> updateExistingProperty(existingProduct, request))
                 .map(propertyRepository :: save)
@@ -79,7 +92,7 @@ public class PropertyService implements IPropertyService{
     }
 
     @Override
-    public void deletePropertyById(Long propertyId) {
+    public void deletePropertyById(UUID propertyId) {
         propertyRepository.findById(propertyId)
                 .ifPresentOrElse(propertyRepository :: delete, () -> {
                     throw new ResourceNotFoundException("Property not Found!");
@@ -94,7 +107,7 @@ public class PropertyService implements IPropertyService{
     @Override
     public PropertyDto convertDto(Property property) {
         PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
-        List<Image> images = propertyRepository.findByPropertyId(property.getId());
+        List<Image> images = imageRepository.findByPropertyId(property.getId());
         List<ImageDto> imageDtos = images.stream()
                 .map(image -> modelMapper.map(image, ImageDto.class))
                 .toList();

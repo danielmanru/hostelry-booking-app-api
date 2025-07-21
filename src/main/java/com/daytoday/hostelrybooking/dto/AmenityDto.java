@@ -2,8 +2,10 @@ package com.daytoday.hostelrybooking.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class AmenityDto {
-    private Long id;
+    private UUID id;
     private String name;
 }

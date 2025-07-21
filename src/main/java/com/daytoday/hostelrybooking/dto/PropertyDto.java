@@ -4,10 +4,11 @@ import com.daytoday.hostelrybooking.enums.PropertyTypeEnum;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class PropertyDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     private String address;

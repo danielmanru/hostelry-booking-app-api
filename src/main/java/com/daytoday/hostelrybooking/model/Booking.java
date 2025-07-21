@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,8 +18,8 @@ import java.time.LocalDate;
 @Entity
 public class Booking extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -31,11 +32,15 @@ public class Booking extends BaseEntity {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
 
-    private BigDecimal totalPrice;
+    private Boolean isForMe;
+    private Integer guestCount;
+    private String guestName;
+
+    private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
-    @OneToOne(mappedBy = "booking", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne
     private Payment payment;
 }

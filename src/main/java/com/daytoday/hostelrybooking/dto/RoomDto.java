@@ -5,9 +5,11 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class RoomDto {
+    private UUID id;
     private String roomName;
     private String description;
     private int maxGuest;
@@ -16,5 +18,5 @@ public class RoomDto {
     private int unitAvailable;
     private Double roomSize;
     private List<ImageDto> images;
-    private List<AmenityDto> amenityIds;
+    private List<AmenityDto> amenities;
 }

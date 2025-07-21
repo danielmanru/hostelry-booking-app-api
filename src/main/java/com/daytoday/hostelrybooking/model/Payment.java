@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,19 +19,21 @@ import java.math.BigDecimal;
 @Entity
 public class Payment extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    private BigDecimal amount;
+    private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethodEnum paymentMethod;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatusEnum status;
+
+    private LocalDate paidAt;
 
 }
