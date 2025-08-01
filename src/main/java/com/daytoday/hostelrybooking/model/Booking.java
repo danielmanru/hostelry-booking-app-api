@@ -28,12 +28,13 @@ public class Booking extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+    private int roomCount;
 
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
 
     private Boolean isForMe;
-    private Integer guestCount;
+    private int guestCount;
     private String guestName;
 
     private BigDecimal totalAmount;

@@ -14,6 +14,7 @@ public interface IPropertyService {
     List<Property> getUserProperty ();
     List<Property> getPropertyByCity (String city);
     List<Property> getPropertyByCountry(String country);
+    List<Property> searchProperty(String city, int guestCount, int roomCount, String sortField, String sortDirection, int page, int size);
     Property addProperty(AddPropertyRequest request);
     Property updateProperty(UpdatePropertyRequest request, UUID propertyId);
     void deletePropertyById(UUID propertyId);

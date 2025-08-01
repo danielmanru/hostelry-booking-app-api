@@ -14,8 +14,10 @@ import com.daytoday.hostelrybooking.repository.RoomRepository;
 import com.daytoday.hostelrybooking.request.AddRoomRequest;
 
 import com.daytoday.hostelrybooking.request.UpdateRoomRequest;
+import com.daytoday.hostelrybooking.specification.RoomSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,6 +64,12 @@ public class RoomService implements IRoomService {
     public Room getRoomById(UUID roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found!"));
+    }
+
+    @Override
+    public List<Room> searchRoom(int guestCount, int roomCount) {
+        Specification<Room> spec = RoomSpecification.hasRoomWithMinGuestAndUnits(guestCount, roomCount);
+        return roomRepository.findAll(spec);
     }
 
     @Override

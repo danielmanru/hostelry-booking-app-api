@@ -12,6 +12,7 @@ public interface IRoomService {
     Room addRoom(AddRoomRequest request, UUID propertyId);
     List<Room> getRoomByPropertyId(UUID propertyId);
     Room getRoomById(UUID roomId);
+    List<Room> searchRoom(int guestCount, int roomCount);
     Room updateRoom(UpdateRoomRequest request, UUID roomId);
     void deleteRoomById(UUID roomId);
     List<RoomDto> getConvertedRooms(List<Room> rooms);

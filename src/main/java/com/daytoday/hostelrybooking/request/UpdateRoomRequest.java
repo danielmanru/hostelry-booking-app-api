@@ -13,10 +13,10 @@ public class UpdateRoomRequest {
     private UUID id;
     private String roomName;
     private String description;
-    private int maxGuest;
+    private Short maxGuest;
     private BigDecimal pricePerNight;
     private BedTypeEnum bedType;
-    private int unitAvailable;
+    private Short unitAvailable;
     private Double roomSize;
     private List<UUID> amenityIds;
 }

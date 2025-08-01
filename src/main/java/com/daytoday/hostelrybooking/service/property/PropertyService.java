@@ -12,12 +12,19 @@ import com.daytoday.hostelrybooking.repository.PropertyRepository;
 import com.daytoday.hostelrybooking.request.AddPropertyRequest;
 import com.daytoday.hostelrybooking.request.UpdatePropertyRequest;
 import com.daytoday.hostelrybooking.service.user.IUserService;
+import com.daytoday.hostelrybooking.specification.PropertySpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +59,23 @@ public class PropertyService implements IPropertyService{
     @Override
     public List<Property> getPropertyByCountry(String country) {
         return propertyRepository.findByCountry(country);
+    }
+
+    @Override
+    public List<Property> searchProperty(String city, int guestCount, int roomCount, String sortField, String sortDirection, int page, int size) {
+        Specification<Property> spec = PropertySpecification.hasCity(city)
+            .and(PropertySpecification.hasRoomWithMinGuestAndUnits(guestCount, roomCount));
+
+      spec = switch (sortField.toLowerCase()) {
+        case "lowest_price" -> spec.and(PropertySpecification.orderByLowestPrice());
+        case "highest_price" -> spec.and(PropertySpecification.orderByHighestPrice());
+        default -> spec.and(PropertySpecification.orderByHighestRating());
+      };
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Property> pagedResult= propertyRepository.findAll(spec, pageable);
+      return pagedResult.getContent();
     }
 
     @Override

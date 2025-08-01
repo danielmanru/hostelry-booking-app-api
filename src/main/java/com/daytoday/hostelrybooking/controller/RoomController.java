@@ -61,6 +61,21 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchRoom(@RequestParam int guestCount, @RequestParam int roomCount) {
+        try {
+            List<Room> rooms = roomService.searchRoom(guestCount, roomCount);
+            if (rooms.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Room not found!", null));
+            }
+            List<RoomDto> roomDtos = roomService.getConvertedRooms(rooms);
+            return ResponseEntity.ok(new ApiResponse("Success", roomDtos));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+
     @PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
     @PutMapping("/update/room/{roomId}")
     public ResponseEntity<ApiResponse> updateRoom(@RequestBody UpdateRoomRequest request, @PathVariable UUID roomId) {
