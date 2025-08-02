@@ -4,7 +4,7 @@ public enum BookingStatusEnum {
     INITIATED,
     AWAITING_PAYMENT,
     PAYMENT_RECEIVED,
-    CANCELED,
+    CANCELLED,
     CHECKED_IN,
     COMPLETED,
     EXPIRED,

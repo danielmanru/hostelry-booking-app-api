@@ -21,6 +21,7 @@ public class Payment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    private String transactionId;
 
     @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
     @JoinColumn(name = "booking_id")

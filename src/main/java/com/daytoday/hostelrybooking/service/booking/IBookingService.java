@@ -1,14 +1,19 @@
 package com.daytoday.hostelrybooking.service.booking;
 
+import com.daytoday.hostelrybooking.dto.BookingDto;
+import com.daytoday.hostelrybooking.enums.BookingStatusEnum;
 import com.daytoday.hostelrybooking.model.Booking;
-import com.daytoday.hostelrybooking.request.CreateBookingRequest;
+import com.daytoday.hostelrybooking.request.AddBookingRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IBookingService {
-  Booking createBooking(CreateBookingRequest request);
+  Booking addBooking(AddBookingRequest request, UUID roomId);
   List<Booking> getUserBookings();
-  Booking getBookingById(Long bookingId);
-  Booking updateBookingStatus(String bookingStatus, Long bookingId);
-  List<Booking> getHostBookings();
+  Booking getBookingById(UUID bookingId);
+  Booking updateBookingStatus(BookingStatusEnum bookingStatus, UUID bookingId);
+  List<Booking> getBookingsByRoom(UUID roomId);
+  List<BookingDto> getConvertedBookings(List<Booking> bookings);
+  BookingDto convertToDto(Booking booking);
 }
