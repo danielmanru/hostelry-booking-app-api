@@ -1,5 +1,6 @@
 package com.daytoday.hostelrybooking.model;
 
+import com.daytoday.hostelrybooking.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,15 +26,15 @@ public class User extends BaseEntity{
     private String email;
 
     private String password;
-    private String verifyOtp;
-    private Boolean isEmailVerified;
-    private Long verifyOtpExpireAt;
-    private String resetOtp;
-    private Long resetOtpExpireAt;
+//    private String verifyOtp;
+//    private Boolean isEmailVerified;
+//    private Long verifyOtpExpireAt;
+//    private String resetOtp;
+//    private Long resetOtpExpireAt;
 
     private String phoneNumber;
 
-    private String role;
+    private UserRoleEnum role;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Property> properties;
