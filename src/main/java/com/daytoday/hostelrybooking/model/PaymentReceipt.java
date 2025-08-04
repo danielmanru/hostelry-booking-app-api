@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PaymentReceipt {
+public class PaymentReceipt extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;

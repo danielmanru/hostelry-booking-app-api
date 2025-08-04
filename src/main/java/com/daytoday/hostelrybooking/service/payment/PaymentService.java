@@ -1,5 +1,6 @@
 package com.daytoday.hostelrybooking.service.payment;
 
+import com.daytoday.hostelrybooking.dto.PaymentDto;
 import com.daytoday.hostelrybooking.enums.PaymentMethodEnum;
 import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
 import com.daytoday.hostelrybooking.exeptions.BadRequestException;
@@ -13,8 +14,8 @@ import com.daytoday.hostelrybooking.repository.PaymentReceiptRepository;
 import com.daytoday.hostelrybooking.repository.PaymentRepository;
 import com.daytoday.hostelrybooking.request.AddPaymentReceiptRequest;
 import com.daytoday.hostelrybooking.request.AddPaymentRequest;
-import com.daytoday.hostelrybooking.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class PaymentService implements IPaymentService {
   private final PaymentRepository paymentRepository;
   private final BookingRepository bookingRepository;
   private final PaymentReceiptRepository paymentReceiptRepository;
+  private final ModelMapper modelMapper;
 
   @Override
   public List<Payment> getAllPayment() {
@@ -66,7 +68,7 @@ public class PaymentService implements IPaymentService {
   }
 
   @Override
-  public Payment updatePaymentStatus(@Nullable AddPaymentReceiptRequest request, UUID paymentId, PaymentStatusEnum paymentStatus) {
+  public void updatePaymentStatus(@Nullable AddPaymentReceiptRequest request, UUID paymentId, PaymentStatusEnum paymentStatus) {
     Payment payment = paymentRepository.findById(paymentId)
         .orElseThrow(() -> new ResourceNotFoundException("Payment Not Found"));
     if(payment.getStatus() != PaymentStatusEnum.UNPAID) {
@@ -89,6 +91,15 @@ public class PaymentService implements IPaymentService {
     }
     payment.setStatus(paymentStatus);
     paymentRepository.save(payment);
-    return null;
+  }
+
+  @Override
+  public List<PaymentDto> getConvertedPayments(List<Payment> payments) {
+    return payments.stream().map(this :: convertToDto).toList();
+  }
+
+  @Override
+  public PaymentDto convertToDto(Payment payment) {
+    return modelMapper.map(payment, PaymentDto.class);
   }
 }
