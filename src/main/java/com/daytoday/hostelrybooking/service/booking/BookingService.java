@@ -70,7 +70,7 @@ public class BookingService implements IBookingService {
     Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
     if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_USER")) && !booking.getUser().equals(user)) {
       throw new AccessDeniedException("Unauthorized");
-    } else if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_OWNER")) {
+    } else if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_OWNER"))) {
       User owner = booking.getRoom().getProperty().getOwner();
       if(!user.equals(owner)) {
         throw new AccessDeniedException("Unauthorized");

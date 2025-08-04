@@ -45,7 +45,7 @@ public class BookingController {
   public ResponseEntity<ApiResponse> getUserBookings() {
     try {
       List<Booking> bookings = bookingService.getUserBookings();
-      if(bookings.isEmpty()) {
+      if (bookings.isEmpty()) {
         return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Booking not found!", null));
       }
       List<BookingDto> bookingDtos = bookingService.getConvertedBookings(bookings);
@@ -82,7 +82,7 @@ public class BookingController {
   public ResponseEntity<ApiResponse> deleteUser(@PathVariable UUID roomId) {
     try {
       List<Booking> bookings = bookingService.getBookingsByRoom(roomId);
-      if(bookings.isEmpty()){
+      if (bookings.isEmpty()) {
         return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Booking not found!", null));
       }
       List<BookingDto> bookingDtos = bookingService.getConvertedBookings(bookings);

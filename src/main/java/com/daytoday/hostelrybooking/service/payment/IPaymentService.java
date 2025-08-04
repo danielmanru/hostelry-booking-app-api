@@ -1,0 +1,17 @@
+package com.daytoday.hostelrybooking.service.payment;
+
+import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
+import com.daytoday.hostelrybooking.model.Payment;
+import com.daytoday.hostelrybooking.request.AddPaymentReceiptRequest;
+import com.daytoday.hostelrybooking.request.AddPaymentRequest;
+import org.springframework.lang.Nullable;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface IPaymentService {
+  List<Payment> getAllPayment();
+  List<Payment> getPaymentByRoom(UUID roomId);
+  Payment addPayment(AddPaymentRequest request);
+  Payment updatePaymentStatus(@Nullable AddPaymentReceiptRequest request, UUID paymentId, PaymentStatusEnum paymentStatus);
+}
