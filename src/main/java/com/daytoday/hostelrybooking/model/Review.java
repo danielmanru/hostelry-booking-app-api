@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Review extends BaseEntity{
@@ -29,4 +28,10 @@ public class Review extends BaseEntity{
     private int rating;
     private String comment;
 
+    public Review(User user, Property property, int rating, String comment) {
+        this.user = user;
+        this.property = property;
+        this.rating = rating;
+        this.comment = comment;
+    }
 }

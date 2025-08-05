@@ -83,6 +83,7 @@ public class AppConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/v1/amenities/**").hasRole("ADMIN")
             .requestMatchers("/api/v1/images/**").hasAnyRole("ADMIN","OWNER")
+            .requestMatchers("/api/v1/wishlist/**").hasRole("USER")
             .requestMatchers("/api/v1/users/add").permitAll()
             .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
             .anyRequest().permitAll());
