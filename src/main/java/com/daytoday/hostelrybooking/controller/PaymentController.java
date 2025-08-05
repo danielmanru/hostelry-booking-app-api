@@ -32,9 +32,9 @@ public class PaymentController {
 
   @PreAuthorize("hasRole('ROLE_USER')")
   @PostMapping("/add")
-  public ResponseEntity<ApiResponse> addPayment(@RequestBody AddPaymentRequest request) {
+  public ResponseEntity<ApiResponse> addPayment(@RequestBody AddPaymentRequest request, @RequestParam UUID bookingId) {
     try {
-      Payment payment = paymentService.addPayment(request);
+      Payment payment = paymentService.addPayment(request, bookingId);
       PaymentDto paymentDto = paymentService.convertToDto(payment);
       return ResponseEntity.status(CREATED).body(new ApiResponse("Success", paymentDto));
     } catch (ResourceNotFoundException e) {

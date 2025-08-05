@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class PaymentReceipt extends BaseEntity{

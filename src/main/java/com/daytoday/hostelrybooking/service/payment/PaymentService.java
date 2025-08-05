@@ -43,8 +43,8 @@ public class PaymentService implements IPaymentService {
   }
 
   @Override
-  public Payment addPayment(AddPaymentRequest request) {
-    Booking booking = bookingRepository.findById(request.getBookingId())
+  public Payment addPayment(AddPaymentRequest request, UUID bookingId) {
+    Booking booking = bookingRepository.findById(bookingId)
         .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
 //    Assuming backend receive respond from payment gateway

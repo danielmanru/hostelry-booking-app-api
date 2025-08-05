@@ -53,4 +53,11 @@ public class Property extends BaseEntity {
         this.country = country;
         this.type = type;
     }
+
+    public void calculateRating() {
+        this.rating = this.reviews.stream()
+            .mapToInt(Review :: getRating)
+            .average()
+            .orElse(0.0);
+    }
 }

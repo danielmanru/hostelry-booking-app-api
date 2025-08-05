@@ -77,7 +77,7 @@ public class BookingController {
     }
   }
 
-  @PreAuthorize("hasAnyRole(['ROLE_ADMIN', 'ROLE_OWNER'])")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OWNER')")
   @GetMapping("/room/{roomId")
   public ResponseEntity<ApiResponse> deleteUser(@PathVariable UUID roomId) {
     try {

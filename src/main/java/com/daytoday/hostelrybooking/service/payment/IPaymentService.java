@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface IPaymentService {
   List<Payment> getAllPayment();
   List<Payment> getPaymentByRoom(UUID roomId);
-  Payment addPayment(AddPaymentRequest request);
+  Payment addPayment(AddPaymentRequest request, UUID bookingId);
   void updatePaymentStatus(@Nullable AddPaymentReceiptRequest request, UUID paymentId, PaymentStatusEnum paymentStatus);
   List<PaymentDto> getConvertedPayments(List<Payment> payments);
   PaymentDto convertToDto(Payment payment);

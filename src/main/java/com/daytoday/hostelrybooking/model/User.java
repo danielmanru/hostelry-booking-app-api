@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class User extends BaseEntity{
@@ -50,4 +49,12 @@ public class User extends BaseEntity{
             joinColumns = @JoinColumn(name ="user_id"),
             inverseJoinColumns = @JoinColumn(name = "property_id"))
     private List<Property> favoriteProperties;
+
+    public void addWishlist(Property property) {
+        this.favoriteProperties.add(property);
+    }
+
+    public void removeWishlist(Property property) {
+        this.favoriteProperties.remove(property);
+    }
 }
