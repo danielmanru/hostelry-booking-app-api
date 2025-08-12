@@ -1,5 +1,6 @@
 package com.daytoday.hostelrybooking.repository;
 
+import com.daytoday.hostelrybooking.model.Property;
 import com.daytoday.hostelrybooking.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -9,5 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface RoomRepository extends JpaRepository<Room, UUID>, JpaSpecificationExecutor<Room> {
-    List<Room> findByPropertyId(UUID propertyId);
+  List<Room> findByPropertyId(UUID propertyId);
+
+  boolean existsByPropertyAndRoomName(Property property, String roomName);
 }

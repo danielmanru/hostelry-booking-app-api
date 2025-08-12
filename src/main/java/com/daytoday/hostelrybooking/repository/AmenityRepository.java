@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AmenityRepository extends JpaRepository<Amenity, UUID> {
-    List<Amenity> findByCategory(String category);
+  List<Amenity> findByCategory(String category);
 
-    boolean existsByName(String name);
+  boolean existsByName(String name);
+
+  boolean existsByCategoryAndName(String category, String name);
 }

@@ -2,7 +2,6 @@ package com.daytoday.hostelrybooking.dto;
 
 import com.daytoday.hostelrybooking.enums.PaymentMethodEnum;
 import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;

@@ -13,47 +13,48 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-public class User extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class User extends BaseEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    private String firstName;
-    private String lastName;
-    @Column(unique = true)
-    private String email;
+  private String firstName;
+  private String lastName;
+  @Column(unique = true)
+  private String email;
 
-    private String password;
+  private String password;
 //    private String verifyOtp;
 //    private Boolean isEmailVerified;
 //    private Long verifyOtpExpireAt;
 //    private String resetOtp;
 //    private Long resetOtpExpireAt;
 
-    private String phoneNumber;
+  @Column(unique = true)
+  private String phoneNumber;
 
-    private UserRoleEnum role;
+  private UserRoleEnum role;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Property> properties;
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Property> properties;
 
-    @OneToMany(mappedBy = "user")
-    private List<Booking> bookings;
+  @OneToMany(mappedBy = "user")
+  private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+  @OneToMany(mappedBy = "user")
+  private List<Review> reviews;
 
-    @ManyToMany
-    @JoinTable(name = "wishlists",
-            joinColumns = @JoinColumn(name ="user_id"),
-            inverseJoinColumns = @JoinColumn(name = "property_id"))
-    private List<Property> favoriteProperties;
+  @ManyToMany
+  @JoinTable(name = "wishlists",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "property_id"))
+  private List<Property> favoriteProperties;
 
-    public void addWishlist(Property property) {
-        this.favoriteProperties.add(property);
-    }
+  public void addWishlist(Property property) {
+    this.favoriteProperties.add(property);
+  }
 
-    public void removeWishlist(Property property) {
-        this.favoriteProperties.remove(property);
-    }
+  public void removeWishlist(Property property) {
+    this.favoriteProperties.remove(property);
+  }
 }
