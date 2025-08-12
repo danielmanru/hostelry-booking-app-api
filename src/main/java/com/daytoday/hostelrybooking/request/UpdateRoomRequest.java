@@ -15,7 +15,9 @@ public class UpdateRoomRequest {
     private String description;
     private Short maxGuest;
     private BigDecimal pricePerNight;
-    private BedTypeEnum bedType;
+    private BedTypeEnum bedType1;
+    private BedTypeEnum bedType2;
+    private BedTypeEnum bedType3;
     private Short unitAvailable;
     private Double roomSize;
     private List<UUID> amenityIds;

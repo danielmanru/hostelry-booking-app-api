@@ -14,7 +14,9 @@ public class RoomDto {
     private String description;
     private int maxGuest;
     private BigDecimal pricePerNight;
-    private BedTypeEnum bedType;
+    private BedTypeEnum bedType1;
+    private BedTypeEnum bedType2;
+    private BedTypeEnum bedType3;
     private int unitAvailable;
     private Double roomSize;
     private List<ImageDto> images;

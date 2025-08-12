@@ -2,12 +2,10 @@ package com.daytoday.hostelrybooking.dto;
 
 import com.daytoday.hostelrybooking.enums.PaymentMethodEnum;
 import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
-import com.daytoday.hostelrybooking.model.Booking;
-import com.daytoday.hostelrybooking.model.PaymentReceipt;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

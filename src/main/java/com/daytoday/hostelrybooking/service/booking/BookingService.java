@@ -1,13 +1,10 @@
 package com.daytoday.hostelrybooking.service.booking;
 
 import com.daytoday.hostelrybooking.dto.BookingDto;
-import com.daytoday.hostelrybooking.dto.ImageDto;
-import com.daytoday.hostelrybooking.dto.RoomDto;
 import com.daytoday.hostelrybooking.enums.BookingStatusEnum;
 import com.daytoday.hostelrybooking.enums.UserRoleEnum;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Booking;
-import com.daytoday.hostelrybooking.model.Image;
 import com.daytoday.hostelrybooking.model.Room;
 import com.daytoday.hostelrybooking.model.User;
 import com.daytoday.hostelrybooking.repository.BookingRepository;
@@ -40,7 +37,10 @@ public class BookingService implements IBookingService {
         .multiply(room.getPricePerNight())
         .multiply(new BigDecimal(request.getNightCount()));
 
-    return bookingRepository.save(createBooking(request, user, room, totalAmount));
+    Booking booking = bookingRepository.save(createBooking(request, user, room, totalAmount));
+    room.decreaseUnitAvailable(request.getRoomCount());
+    roomRepository.save(room);
+    return booking;
   }
 
   private Booking createBooking(AddBookingRequest request, User user, Room room, BigDecimal totalAmount) {
@@ -85,6 +85,11 @@ public class BookingService implements IBookingService {
     Booking booking = getBookingById(bookingId);
     if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_ADMIN"))) {
       booking.setStatus(bookingStatus);
+      if (bookingStatus == BookingStatusEnum.COMPLETED) {
+        Room room = booking.getRoom();
+        room.increaseUnitAvailable(booking.getRoomCount());
+        roomRepository.save(room);
+      }
     } else if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_USER"))) {
       if (!booking.getUser().equals(user)) {
         throw new AccessDeniedException("Unauthorized");

@@ -2,7 +2,6 @@ package com.daytoday.hostelrybooking.model;
 
 import com.daytoday.hostelrybooking.enums.BedTypeEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,49 +14,64 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Room extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Room extends BaseEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "property_id")
-    private Property property;
+  @ManyToOne
+  @JoinColumn(name = "property_id")
+  private Property property;
 
-    private String roomName;
-    private String description;
-    private int maxGuest;
+  private String roomName;
+  private String description;
+  private int maxGuest;
 
-    private BigDecimal pricePerNight;
+  private BigDecimal pricePerNight;
 
-    @Enumerated(EnumType.STRING)
-    private BedTypeEnum bedType;
+  @Enumerated(EnumType.STRING)
+  private BedTypeEnum bedType1;
+  @Enumerated(EnumType.STRING)
+  private BedTypeEnum bedType2;
+  @Enumerated(EnumType.STRING)
+  private BedTypeEnum bedType3;
 
-    private int unitAvailable;
+  private int unitAvailable;
 
-    private Double roomSize;
+  private Double roomSize;
 
-    @OneToMany(mappedBy = "room")
-    private List<Booking> bookings;
+  @OneToMany(mappedBy = "room")
+  private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Image> images;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "room_amenities",
-            joinColumns = @JoinColumn(name = "room_id"),
-            inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-    private List<Amenity> amenities;
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(name = "room_amenities",
+      joinColumns = @JoinColumn(name = "room_id"),
+      inverseJoinColumns = @JoinColumn(name = "amenity_id"))
+  private List<Amenity> amenities;
 
-    public Room(Property property, String roomName, String description, int maxGuest, BigDecimal pricePerNight, BedTypeEnum bedType, int unitAvailable, Double roomSize, List<Amenity> amenities) {
-        this.property = property;
-        this.roomName = roomName;
-        this.description = description;
-        this.maxGuest = maxGuest;
-        this.pricePerNight = pricePerNight;
-        this.bedType = bedType;
-        this.unitAvailable = unitAvailable;
-        this.roomSize = roomSize;
-        this.amenities = amenities;
-    }
+  public Room(Property property, String roomName, String description, int maxGuest, BigDecimal pricePerNight, BedTypeEnum bedType1, BedTypeEnum bedType2, BedTypeEnum bedType3, int unitAvailable, Double roomSize, List<Amenity> amenities) {
+    this.property = property;
+    this.roomName = roomName;
+    this.description = description;
+    this.maxGuest = maxGuest;
+    this.pricePerNight = pricePerNight;
+    this.bedType1 = bedType1;
+    this.bedType2 = bedType2;
+    this.bedType3 = bedType3;
+    this.unitAvailable = unitAvailable;
+    this.roomSize = roomSize;
+    this.amenities = amenities;
+  }
+
+  public void decreaseUnitAvailable(int roomBookedCount) {
+    this.unitAvailable -= roomBookedCount;
+  }
+
+  public void increaseUnitAvailable(int roomBookedCount) {
+    this.unitAvailable += roomBookedCount;
+  }
 }
+

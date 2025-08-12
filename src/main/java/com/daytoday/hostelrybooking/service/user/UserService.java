@@ -1,6 +1,7 @@
 package com.daytoday.hostelrybooking.service.user;
 
 import com.daytoday.hostelrybooking.dto.UserDto;
+import com.daytoday.hostelrybooking.enums.UserRoleEnum;
 import com.daytoday.hostelrybooking.exeptions.AlreadyExistsException;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.User;
@@ -39,7 +40,7 @@ public class UserService implements IUserService {
           user.setPassword(passwordEncoder.encode(req.getPassword()));
           user.setFirstName(req.getFirstName());
           user.setLastName(req.getLastName());
-          user.setRole(req.getRole());
+          user.setRole(UserRoleEnum.valueOf(req.getRole()));
           return userRepository.save(user);
         }).orElseThrow(() -> new AlreadyExistsException("This email " + request.getEmail() + "already exists!"));
   }

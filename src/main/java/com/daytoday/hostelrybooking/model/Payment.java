@@ -3,7 +3,6 @@ package com.daytoday.hostelrybooking.model;
 import com.daytoday.hostelrybooking.enums.PaymentMethodEnum;
 import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
