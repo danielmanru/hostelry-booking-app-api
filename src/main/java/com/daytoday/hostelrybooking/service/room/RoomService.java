@@ -42,23 +42,6 @@ public class RoomService implements IRoomService {
     return roomRepository.save(createRoom(request, amenities));
   }
 
-//  private Room createRoom(AddRoomRequest request, List<Amenity> amenities) {
-//    Room room = new Room();
-//    room.setProperty(request.getProperty());
-//    room.setRoomName(request.getRoomName());
-//    room.setDescription(request.getDescription());
-//    room.setMaxGuest(request.getMaxGuest());
-//    room.setPricePerNight(request.getPricePerNight());
-//    room.setBedType1(BedTypeEnum.valueOf(request.getBedType1()));
-//    room.setBedType2(BedTypeEnum.valueOf(request.getBedType2()));
-//    room.setBedType3(BedTypeEnum.valueOf(request.getBedType3()));
-//    room.setUnitAvailable(request.getUnitAvailable());
-//    room.setRoomSize(request.getRoomSize());
-//    room.setAmenities(amenities);
-//
-//    return room;
-//  }
-
   private Room createRoom(AddRoomRequest request, List<Amenity> amenities) {
     return new Room(
         request.getProperty(),

@@ -45,10 +45,11 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    public Booking(User user, Room room, int roomCount, LocalDate checkInDate, LocalDate checkOutDate, Boolean isForMe, Integer guestCount, String guestName, BigDecimal totalAmount, BookingStatusEnum status) {
+    public Booking(User user, Room room, int roomCount, int nightCount, LocalDate checkInDate, LocalDate checkOutDate, Boolean isForMe, Integer guestCount, String guestName, BigDecimal totalAmount, BookingStatusEnum status) {
         this.user = user;
         this.room = room;
         this.roomCount = roomCount;
+        this.nightCount = nightCount;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.isForMe = isForMe;

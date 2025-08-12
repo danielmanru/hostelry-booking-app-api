@@ -36,7 +36,7 @@ public class RoomController {
         }
     }
 
-    @GetMapping("/by/property/{propertyId}")
+    @GetMapping("/property/{propertyId}")
     public ResponseEntity<ApiResponse> getRoomByPropertyId(@PathVariable UUID propertyId) {
         try {
             List<Room> rooms = roomService.getRoomByPropertyId(propertyId);

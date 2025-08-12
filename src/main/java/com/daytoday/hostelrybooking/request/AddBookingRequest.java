@@ -10,8 +10,6 @@ import java.time.LocalDate;
 
 @Data
 public class AddBookingRequest {
-  private User user;
-  private Room room;
   private int roomCount;
   private int nightCount;
   private LocalDate checkInDate;
@@ -19,6 +17,4 @@ public class AddBookingRequest {
   private Boolean isForMe;
   private Integer guestCount;
   private String guestName;
-  private BigDecimal totalAmount;
-  private BookingStatusEnum status;
 }

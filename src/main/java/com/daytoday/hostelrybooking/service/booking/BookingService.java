@@ -48,6 +48,7 @@ public class BookingService implements IBookingService {
         user,
         room,
         request.getRoomCount(),
+        request.getNightCount(),
         request.getCheckInDate(),
         request.getCheckOutDate(),
         request.getIsForMe(),
