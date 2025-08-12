@@ -67,7 +67,7 @@ public class ReviewController {
     }
   }
 
-  @GetMapping("/review/{reviewId)")
+  @GetMapping("/review/{reviewId})")
   public ResponseEntity<ApiResponse> getReviewById(@PathVariable UUID reviewId) {
     try {
       Review review = reviewService.getReviewById(reviewId);

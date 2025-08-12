@@ -24,7 +24,7 @@ public class PropertyController {
   private final IPropertyService propertyService;
 
   @GetMapping("/property/{propertyId}")
-  public ResponseEntity<ApiResponse> getProductById(@PathVariable UUID propertyId) {
+  public ResponseEntity<ApiResponse> getPropertyById(@PathVariable UUID propertyId) {
     try {
       Property property = propertyService.getPropertyById(propertyId);
       PropertyDto propertyDto = propertyService.convertDto(property);

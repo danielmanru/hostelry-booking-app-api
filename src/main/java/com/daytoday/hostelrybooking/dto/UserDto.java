@@ -1,5 +1,6 @@
 package com.daytoday.hostelrybooking.dto;
 
+import com.daytoday.hostelrybooking.enums.UserRoleEnum;
 import lombok.Data;
 
 import java.util.UUID;
@@ -11,4 +12,5 @@ public class UserDto {
     private String lastName;
     private String email;
     private String phoneNumber;
+    private UserRoleEnum role;
  }

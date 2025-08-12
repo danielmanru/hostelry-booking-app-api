@@ -11,13 +11,14 @@ import java.util.UUID;
 
 @Data
 public class AddRoomRequest {
-    private UUID id;
     private Property property;
     private String roomName;
     private String description;
     private Short maxGuest;
     private BigDecimal pricePerNight;
-    private String bedType;
+    private String bedType1;
+    private String bedType2;
+    private String bedType3;
     private Short unitAvailable;
     private Double roomSize;
     private List<UUID> amenityIds;

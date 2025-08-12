@@ -25,7 +25,7 @@ public class WebUserDetails implements UserDetails {
         user.getId(),
         user.getEmail(),
         user.getPassword(),
-        List.of(new SimpleGrantedAuthority(user.getRole()))
+        List.of(new SimpleGrantedAuthority(user.getRole().toString()))
     );
   }
 

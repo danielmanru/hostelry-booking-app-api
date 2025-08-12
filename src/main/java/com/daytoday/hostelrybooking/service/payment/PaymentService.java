@@ -39,7 +39,7 @@ public class PaymentService implements IPaymentService {
 
   @Override
   public List<Payment> getPaymentByRoom(UUID roomId) {
-    return paymentRepository.findByBookingRoomId();
+    return paymentRepository.findByBookingRoomId(roomId);
   }
 
   @Override
