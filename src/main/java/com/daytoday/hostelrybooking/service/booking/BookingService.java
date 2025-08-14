@@ -84,7 +84,10 @@ public class BookingService implements IBookingService {
   public Booking updateBookingStatus(BookingStatusEnum bookingStatus, UUID bookingId) {
     User user = userService.getAuthenticatedUser();
     Booking booking = getBookingById(bookingId);
-    if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_ADMIN"))) {
+    if (booking.getStatus() == BookingStatusEnum.CANCELLED || booking.getStatus() == BookingStatusEnum.COMPLETED){
+      throw new AccessDeniedException("Unauthorized");
+    }
+    if (user.getRole().equals(UserRoleEnum.ROLE_ADMIN)) {
       booking.setStatus(bookingStatus);
       if (bookingStatus == BookingStatusEnum.COMPLETED) {
         Room room = booking.getRoom();
@@ -101,6 +104,9 @@ public class BookingService implements IBookingService {
         throw new AccessDeniedException("Unauthorized");
       }
     } else if (user.getRole().equals(UserRoleEnum.valueOf("ROLE_OWNER"))) {
+      if (!booking.getRoom().getProperty().getOwner().equals(user)) {
+        throw new AccessDeniedException("Unauthorized");
+      }
       if (bookingStatus == BookingStatusEnum.CHECKED_IN) {
         booking.setStatus(bookingStatus);
       } else {

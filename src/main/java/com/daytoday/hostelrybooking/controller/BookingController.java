@@ -56,7 +56,7 @@ public class BookingController {
   }
 
   @GetMapping("/booking/{bookingId}")
-  public ResponseEntity<ApiResponse> createUser(@PathVariable UUID bookingId) {
+  public ResponseEntity<ApiResponse> getBookingById(@PathVariable UUID bookingId) {
     try {
       Booking booking = bookingService.getBookingById(bookingId);
       BookingDto bookingDto = bookingService.convertToDto(booking);
@@ -67,7 +67,7 @@ public class BookingController {
   }
 
   @PatchMapping("/update-status")
-  public ResponseEntity<ApiResponse> updateUser(@RequestParam String bookingStatus, @RequestParam UUID bookingId) {
+  public ResponseEntity<ApiResponse> updateBookingStatus(@RequestParam String bookingStatus, @RequestParam UUID bookingId) {
     try {
       Booking booking = bookingService.updateBookingStatus(BookingStatusEnum.valueOf(bookingStatus), bookingId);
       BookingDto bookingDto = bookingService.convertToDto(booking);
@@ -79,7 +79,7 @@ public class BookingController {
 
   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OWNER')")
   @GetMapping("/room/{roomId}")
-  public ResponseEntity<ApiResponse> deleteUser(@PathVariable UUID roomId) {
+  public ResponseEntity<ApiResponse> getBookingsByRoom(@PathVariable UUID roomId) {
     try {
       List<Booking> bookings = bookingService.getBookingsByRoom(roomId);
       if (bookings.isEmpty()) {

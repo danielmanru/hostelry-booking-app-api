@@ -41,7 +41,7 @@ public class AppConfig {
   private final JwtUtils jwtUtils;
 
   private static final List<String> SECURED_URLS =
-      List.of("/api/v1/users/**", "/api/v1/cartItems/**");
+      List.of("/api/v1/users/**", "/api/v1/bookings/**");
 
   @Bean
   public Cloudinary cloudinary() {
