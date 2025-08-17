@@ -43,11 +43,7 @@ public class ReviewService implements IReviewService {
     Booking booking = bookingRepository.findById(bookingId)
         .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
 
-    if (!user.equals(booking.getUser())){
-      throw new AccessDeniedException("Forbidden");
-    }
-
-    if (booking.getStatus() != BookingStatusEnum.COMPLETED) {
+    if (!user.equals(booking.getUser()) || booking.getStatus() != BookingStatusEnum.COMPLETED){
       throw new AccessDeniedException("Forbidden");
     }
 
