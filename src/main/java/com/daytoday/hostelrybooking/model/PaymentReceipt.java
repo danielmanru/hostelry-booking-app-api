@@ -19,7 +19,7 @@ public class PaymentReceipt extends BaseEntity{
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @OneToOne(mappedBy = "paymentReceipt", cascade = CascadeType.ALL)
+  @OneToOne
   @JoinColumn(name = "payment_id")
   private Payment payment;
 

@@ -1,14 +1,12 @@
 package com.daytoday.hostelrybooking.controller;
 
-import com.daytoday.hostelrybooking.dto.BookingDto;
 import com.daytoday.hostelrybooking.dto.PaymentDto;
 import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
+import com.daytoday.hostelrybooking.exeptions.AlreadyExistsException;
 import com.daytoday.hostelrybooking.exeptions.BadRequestException;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.exeptions.StatusCannotBeChangedException;
-import com.daytoday.hostelrybooking.model.Booking;
 import com.daytoday.hostelrybooking.model.Payment;
-import com.daytoday.hostelrybooking.request.AddBookingRequest;
 import com.daytoday.hostelrybooking.request.AddPaymentReceiptRequest;
 import com.daytoday.hostelrybooking.request.AddPaymentRequest;
 import com.daytoday.hostelrybooking.response.ApiResponse;
@@ -39,11 +37,15 @@ public class PaymentController {
       return ResponseEntity.status(CREATED).body(new ApiResponse("Success", paymentDto));
     } catch (ResourceNotFoundException e) {
       return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+    } catch (AlreadyExistsException e) {
+      return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
+    } catch (BadRequestException e) {
+      return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
     }
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @PostMapping("/")
+  @GetMapping("/")
   public ResponseEntity<ApiResponse> getAllPayments() {
     try {
       List<Payment> payments = paymentService.getAllPayment();
@@ -58,7 +60,7 @@ public class PaymentController {
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @PostMapping("/room/{roomId}")
+  @GetMapping("/room/{roomId}")
   public ResponseEntity<ApiResponse> getPaymentByRoom(@PathVariable UUID roomId) {
     try {
       List<Payment> payments = paymentService.getPaymentByRoom(roomId);
@@ -73,11 +75,12 @@ public class PaymentController {
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @PostMapping("/update/status")
+  @PatchMapping("/update-status")
   public ResponseEntity<ApiResponse> updatePaymentStatus(@Nullable @RequestBody AddPaymentReceiptRequest request, @RequestParam UUID paymentId, @RequestParam String paymentStatus) {
     try {
-      paymentService.updatePaymentStatus(request, paymentId, PaymentStatusEnum.valueOf(paymentStatus));
-      return ResponseEntity.ok(new ApiResponse("Success", null));
+      Payment payment = paymentService.updatePaymentStatus(request, paymentId, PaymentStatusEnum.valueOf(paymentStatus));
+      PaymentDto paymentDto = paymentService.convertToDto(payment);
+      return ResponseEntity.ok(new ApiResponse("Success", paymentDto));
     } catch (ResourceNotFoundException e) {
       return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
     } catch (StatusCannotBeChangedException e) {

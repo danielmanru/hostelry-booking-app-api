@@ -1,9 +1,7 @@
 package com.daytoday.hostelrybooking.service.payment;
 
-import com.daytoday.hostelrybooking.dto.BookingDto;
 import com.daytoday.hostelrybooking.dto.PaymentDto;
 import com.daytoday.hostelrybooking.enums.PaymentStatusEnum;
-import com.daytoday.hostelrybooking.model.Booking;
 import com.daytoday.hostelrybooking.model.Payment;
 import com.daytoday.hostelrybooking.request.AddPaymentReceiptRequest;
 import com.daytoday.hostelrybooking.request.AddPaymentRequest;
@@ -16,7 +14,7 @@ public interface IPaymentService {
   List<Payment> getAllPayment();
   List<Payment> getPaymentByRoom(UUID roomId);
   Payment addPayment(AddPaymentRequest request, UUID bookingId);
-  void updatePaymentStatus(@Nullable AddPaymentReceiptRequest request, UUID paymentId, PaymentStatusEnum paymentStatus);
+  Payment updatePaymentStatus(@Nullable AddPaymentReceiptRequest request, UUID paymentId, PaymentStatusEnum paymentStatus);
   List<PaymentDto> getConvertedPayments(List<Payment> payments);
   PaymentDto convertToDto(Payment payment);
 

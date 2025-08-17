@@ -20,7 +20,7 @@ public class Payment extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
@@ -31,8 +31,7 @@ public class Payment extends BaseEntity{
     private String paymentUrl;
     private LocalDateTime expiresAt;
 
-    @OneToOne
-    @JoinColumn(name = "payment_receipt_id")
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
     private PaymentReceipt paymentReceipt;
 
     @Enumerated(EnumType.STRING)

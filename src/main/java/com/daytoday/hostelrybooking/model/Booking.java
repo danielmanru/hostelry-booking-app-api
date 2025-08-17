@@ -41,8 +41,7 @@ public class Booking extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
 
     public Booking(User user, Room room, int roomCount, int nightCount, LocalDate checkInDate, LocalDate checkOutDate, Boolean isForMe, Integer guestCount, String guestName, BigDecimal totalAmount, BookingStatusEnum status) {
