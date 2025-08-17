@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface IReviewService {
   List<Review> getReviewByProperty(UUID propertyId);
-  Review addReview(AddReviewRequest request, UUID propertyId);
+  Review addReview(AddReviewRequest request, UUID bookingId);
   Review getReviewById(UUID reviewId);
   List<Review> getUserReview();
   void deleteReview(UUID reviewId);

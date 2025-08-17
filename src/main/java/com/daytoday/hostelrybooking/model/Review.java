@@ -20,6 +20,10 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
+
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
@@ -27,8 +31,9 @@ public class Review extends BaseEntity{
     private int rating;
     private String comment;
 
-    public Review(User user, Property property, int rating, String comment) {
+    public Review(User user, Booking booking, Property property, int rating, String comment) {
         this.user = user;
+        this.booking = booking;
         this.property = property;
         this.rating = rating;
         this.comment = comment;

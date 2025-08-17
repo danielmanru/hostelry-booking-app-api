@@ -2,16 +2,22 @@ package com.daytoday.hostelrybooking.service.review;
 
 import com.daytoday.hostelrybooking.dto.PaymentDto;
 import com.daytoday.hostelrybooking.dto.ReviewDto;
+import com.daytoday.hostelrybooking.enums.BookingStatusEnum;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
+import com.daytoday.hostelrybooking.model.Booking;
 import com.daytoday.hostelrybooking.model.Property;
 import com.daytoday.hostelrybooking.model.Review;
 import com.daytoday.hostelrybooking.model.User;
+import com.daytoday.hostelrybooking.repository.BookingRepository;
 import com.daytoday.hostelrybooking.repository.PropertyRepository;
 import com.daytoday.hostelrybooking.repository.ReviewRepository;
 import com.daytoday.hostelrybooking.request.AddReviewRequest;
+import com.daytoday.hostelrybooking.service.booking.IBookingService;
 import com.daytoday.hostelrybooking.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +30,7 @@ public class ReviewService implements IReviewService {
   private final IUserService userService;
   private final ModelMapper modelMapper;
   private final PropertyRepository propertyRepository;
+  private final BookingRepository bookingRepository;
 
   @Override
   public List<Review> getReviewByProperty(UUID propertyId) {
@@ -31,21 +38,31 @@ public class ReviewService implements IReviewService {
   }
 
   @Override
-  public Review addReview(AddReviewRequest request, UUID propertyId) {
+  public Review addReview(AddReviewRequest request, UUID bookingId) {
     User user = userService.getAuthenticatedUser();
-    Property property = propertyRepository.findById(propertyId)
-        .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
-    Review savedReview = reviewRepository.save(createReview(request, property, user));
+    Booking booking = bookingRepository.findById(bookingId)
+        .orElseThrow(() -> new ResourceNotFoundException("Booking not found."));
+
+    if (!user.equals(booking.getUser())){
+      throw new AccessDeniedException("Forbidden");
+    }
+
+    if (booking.getStatus() != BookingStatusEnum.COMPLETED) {
+      throw new AccessDeniedException("Forbidden");
+    }
+
+    Review savedReview = reviewRepository.save(createReview(request, booking));
     Property savedReviewProperty = savedReview.getProperty();
     savedReviewProperty.calculateRating();
     propertyRepository.save(savedReviewProperty);
     return savedReview;
   }
 
-  private Review createReview(AddReviewRequest request, Property property, User user) {
+  private Review createReview(AddReviewRequest request, Booking booking) {
     return new Review(
-        user,
-        property,
+        booking.getUser(),
+        booking,
+        booking.getRoom().getProperty(),
         request.getRating(),
         request.getComment()
     );

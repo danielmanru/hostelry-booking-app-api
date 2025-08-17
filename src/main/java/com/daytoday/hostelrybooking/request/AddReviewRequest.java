@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class AddReviewRequest {
-  private User user;
-  private Property property;
   private int rating;
   private String comment;
 }

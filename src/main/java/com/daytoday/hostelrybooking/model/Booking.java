@@ -44,6 +44,9 @@ public class Booking extends BaseEntity {
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
 
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    private Review review;
+
     public Booking(User user, Room room, int roomCount, int nightCount, LocalDate checkInDate, LocalDate checkOutDate, Boolean isForMe, Integer guestCount, String guestName, BigDecimal totalAmount, BookingStatusEnum status) {
         this.user = user;
         this.room = room;

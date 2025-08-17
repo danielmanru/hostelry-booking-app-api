@@ -27,9 +27,9 @@ public class ReviewController {
 
   @PreAuthorize("hasRole('ROLE_USER')")
   @PostMapping("/add")
-  public ResponseEntity<ApiResponse> addReview(@RequestBody AddReviewRequest request, @RequestParam UUID propertyId) {
+  public ResponseEntity<ApiResponse> addReview(@RequestBody AddReviewRequest request, @RequestParam UUID bookingId) {
     try {
-      Review review = reviewService.addReview(request, propertyId);
+      Review review = reviewService.addReview(request, bookingId);
       ReviewDto reviewDto = reviewService.convertToDto(review);
       return ResponseEntity.status(CREATED).body(new ApiResponse("Success", reviewDto));
     } catch (ResourceNotFoundException e) {
@@ -67,7 +67,7 @@ public class ReviewController {
     }
   }
 
-  @GetMapping("/review/{reviewId})")
+  @GetMapping("/review/{reviewId}")
   public ResponseEntity<ApiResponse> getReviewById(@PathVariable UUID reviewId) {
     try {
       Review review = reviewService.getReviewById(reviewId);

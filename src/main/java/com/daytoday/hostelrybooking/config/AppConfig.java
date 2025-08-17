@@ -1,12 +1,15 @@
 package com.daytoday.hostelrybooking.config;
 
 import com.cloudinary.Cloudinary;
+import com.daytoday.hostelrybooking.dto.ReviewDto;
+import com.daytoday.hostelrybooking.model.Review;
 import com.daytoday.hostelrybooking.security.jwt.AuthTokenFilter;
 import com.daytoday.hostelrybooking.security.jwt.JwtAuthEntryPoint;
 import com.daytoday.hostelrybooking.security.jwt.JwtUtils;
 import com.daytoday.hostelrybooking.security.user.WebUserDetailsService;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +29,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -50,7 +54,15 @@ public class AppConfig {
 
   @Bean
   public ModelMapper modelMapper() {
-    return new ModelMapper();
+    ModelMapper modelMapper = new ModelMapper();
+    modelMapper.addMappings(new PropertyMap<Review, ReviewDto>() {
+      @Override
+      protected void configure() {
+        map(source.getProperty().getId(), destination.getPropertyId());
+      }
+    });
+
+    return modelMapper;
   }
 
   @Bean

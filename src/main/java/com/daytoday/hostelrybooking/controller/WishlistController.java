@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/wishlists")
 public class WishlistController {
-  private IWishlistService wishlistService;
+  private final IWishlistService wishlistService;
 
   @PostMapping("/add")
   public ResponseEntity<ApiResponse> addWishlist(@RequestParam UUID propertyId) {
