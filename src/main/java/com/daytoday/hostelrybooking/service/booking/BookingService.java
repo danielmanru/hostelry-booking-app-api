@@ -3,6 +3,7 @@ package com.daytoday.hostelrybooking.service.booking;
 import com.daytoday.hostelrybooking.dto.BookingDto;
 import com.daytoday.hostelrybooking.enums.BookingStatusEnum;
 import com.daytoday.hostelrybooking.enums.UserRoleEnum;
+import com.daytoday.hostelrybooking.exeptions.NotEnoughRoomsException;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Booking;
 import com.daytoday.hostelrybooking.model.Room;
@@ -32,6 +33,10 @@ public class BookingService implements IBookingService {
   public Booking addBooking(AddBookingRequest request, UUID roomId) {
     User user = userService.getAuthenticatedUser();
     Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+
+    if (room.getUnitAvailable() < request.getRoomCount()) {
+      throw new NotEnoughRoomsException("Your request exceeds the current room availability.");
+    }
 
     BigDecimal totalAmount = new BigDecimal(request.getRoomCount())
         .multiply(room.getPricePerNight())

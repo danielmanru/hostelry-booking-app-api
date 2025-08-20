@@ -4,6 +4,7 @@ import com.daytoday.hostelrybooking.dto.BookingDto;
 import com.daytoday.hostelrybooking.dto.UserDto;
 import com.daytoday.hostelrybooking.enums.BookingStatusEnum;
 import com.daytoday.hostelrybooking.exeptions.AlreadyExistsException;
+import com.daytoday.hostelrybooking.exeptions.NotEnoughRoomsException;
 import com.daytoday.hostelrybooking.exeptions.ResourceNotFoundException;
 import com.daytoday.hostelrybooking.model.Booking;
 import com.daytoday.hostelrybooking.model.User;
@@ -37,6 +38,8 @@ public class BookingController {
       return ResponseEntity.status(CREATED).body(new ApiResponse("Success", bookingDto));
     } catch (ResourceNotFoundException e) {
       return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+    } catch (NotEnoughRoomsException e) {
+      return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
     }
   }
 
