@@ -1,0 +1,3584 @@
+openapi: 3.1.0
+info:
+  title: Hostelry Booking API
+  description: |
+    API documentation for hostelry booking API
+
+    Source Code : https://github.com/danielmanru/hostelry-booking-app-api
+  version: 1.0.0
+  contact:
+    name: Daniel Manurung
+    url: https://www.linkedin.com/in/daniel-manurung/
+  license:
+    name: APACHE 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+tags:
+  - name: Auth
+  - name: User
+  - name: Amenity
+  - name: Image
+  - name: Property
+  - name: Room
+  - name: Booking
+  - name: Payment
+  - name: Wishlist
+  - name: Review
+paths:
+  /api/v1/auth/login:
+    post:
+      summary: Login
+      deprecated: false
+      description: ""
+      tags:
+        - Auth
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            example:
+              email: userowner0@gmail.com
+              password: "12345678"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+  /api/v1/users/add:
+    post:
+      summary: Create User
+      deprecated: false
+      description: ""
+      tags:
+        - User
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+                - role
+            example:
+              firstName: Daniel
+              lastName: Manurung
+              email: daniel5@gmail.com
+              password: "12345"
+              role: ROLE_USER
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/User"
+                required:
+                  - message
+                  - data
+              example:
+                message: User created successfully
+                data:
+                  id: db9f00db-2af5-4a4a-9ed3-4515cc9c22f4
+                  firstName: Daniel
+                  lastName: Manurung
+                  email: daniel6@gmail.com
+                  phoneNumber: null
+          headers: {}
+      security: []
+  /api/v1/users/user:
+    get:
+      summary: Get User Data
+      deprecated: false
+      description: ""
+      tags:
+        - User
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/users/5a3a31c6-b345-44e8-9dd8-afef0981934f/user:
+    get:
+      summary: Get User by Id
+      deprecated: false
+      description: ""
+      tags:
+        - User
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/users/update:
+    put:
+      summary: Update User Detail
+      deprecated: false
+      description: ""
+      tags:
+        - User
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                phoneNumber:
+                  type: string
+              required:
+                - firstName
+                - lastName
+                - phoneNumber
+            example:
+              firstName: Daniel
+              lastName: Manurung
+              phoneNumber: "08123456789"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/users/755721b5-dc95-4d86-97dc-721f2b2e5e8a/delete:
+    delete:
+      summary: Delete User
+      deprecated: false
+      description: ""
+      tags:
+        - User
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/amenities/add:
+    post:
+      summary: Add Amenities
+      deprecated: false
+      description: ""
+      tags:
+        - Amenity
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                name:
+                  type: string
+              required:
+                - category
+                - name
+            example:
+              category: Umum
+              name: Balkon
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Amenity"
+                required:
+                  - message
+                  - data
+              example:
+                message: Success add new amenity
+                data:
+                  id: 3e0de427-2868-4dc6-b4d3-89e9eef3ab14
+                  name: Kolam Renang
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/amenities/:
+    get:
+      summary: Get All Amenities
+      deprecated: false
+      description: ""
+      tags:
+        - Amenity
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Amenity"
+                required:
+                  - message
+                  - data
+              example:
+                message: Success get all amenities
+                data:
+                  - id: 39a6512f-b77b-45e0-97be-766451db259b
+                    name: Balkon
+                  - id: 3e0de427-2868-4dc6-b4d3-89e9eef3ab14
+                    name: Kolam Renang
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/amenities/by/category/Umum:
+    get:
+      summary: Get Amenities by Category
+      deprecated: false
+      description: ""
+      tags:
+        - Amenity
+      parameters: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            example:
+              category: umum
+              name: Kolam Renang
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/amenities/amenity/2e666b55-44bd-484d-9cc6-e84f37d54b8f/update:
+    put:
+      summary: Update Amenity
+      deprecated: false
+      description: ""
+      tags:
+        - Amenity
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                name:
+                  type: string
+              required:
+                - category
+                - name
+            example:
+              category: Umum
+              name: Kolam Renang Dewasa
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/amenities/amenity/2e666b55-44bd-484d-9cc6-e84f37d54b8f/delete:
+    delete:
+      summary: Delete Amenity
+      deprecated: false
+      description: ""
+      tags:
+        - Amenity
+      parameters: []
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            example:
+              category: Umum
+              name: Kolam Renang Dewasa
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/images/add/property/images:
+    post:
+      summary: Add Property Images
+      deprecated: false
+      description: ""
+      tags:
+        - Image
+      parameters:
+        - name: propertyId
+          in: query
+          description: ""
+          required: true
+          example: |
+            3a5fd506-0d54-464a-bafe-60eddff252b5
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  example: []
+                  type: string
+                  format: binary
+              required:
+                - images
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/properties/add:
+    post:
+      summary: Add Property
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                address:
+                  type: string
+                city:
+                  type: string
+                country:
+                  type: string
+                type:
+                  type: string
+              required:
+                - name
+                - description
+                - address
+                - city
+                - country
+                - type
+            example:
+              name: Tropica Beach Resort
+              description: >-
+                Resor mewah bergaya tropis yang terletak langsung di pinggir
+                pantai dengan desain modern alami, dikelilingi taman hijau dan
+                pohon kelapa, menawarkan kolam renang besar dan pemandangan laut
+                yang memukau.
+              address: Jalan Pantai Tropis No.88
+              city: Kuta
+              country: Indonesia
+              type: HOTEL
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Property"
+                required:
+                  - message
+                  - data
+              example:
+                message: Add Property Success
+                data:
+                  id: 301ffd32-250f-4f21-a238-50759a5b8fc2
+                  name: Tropica Beach Resort
+                  description: >-
+                    Resor mewah bergaya tropis yang terletak langsung di pinggir
+                    pantai dengan desain modern alami, dikelilingi taman hijau
+                    dan pohon kelapa, menawarkan kolam renang besar dan
+                    pemandangan laut yang memukau.
+                  address: Jalan Pantai Tropis No.88
+                  city: Kuta
+                  country: Indonesia
+                  type: HOTEL
+                  images: []
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/properties/property/{propertyId}:
+    get:
+      summary: Get Property by Id
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters:
+        - name: propertyId
+          in: path
+          description: ""
+          required: true
+          example: 4875c2bb-34d3-4ae4-a2b0-1c09ba130c7e
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+  /api/v1/properties/user/eeb65b67-c2fc-4310-bb98-f60b81d8c77c/properties:
+    get:
+      summary: Get Property By User Id
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/properties/user/properties:
+    get:
+      summary: Get User Property
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/properties/by/city/kuta:
+    get:
+      summary: Get Property by City
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+  /api/v1/properties/by/country/indonesia:
+    get:
+      summary: Get Property by Country
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+  /api/v1/properties/property/bc71a4cd-ea30-407e-b2ef-04ea916aa367/update:
+    put:
+      summary: Update Property
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                address:
+                  type: string
+                city:
+                  type: string
+                country:
+                  type: string
+                type:
+                  type: string
+              required:
+                - name
+                - description
+                - address
+                - city
+                - country
+                - type
+            example:
+              name: Tropica Beach Resort
+              description: >-
+                Resor mewah bergaya tropis yang terletak langsung di pinggir
+                pantai dengan desain modern alami, dikelilingi taman hijau dan
+                pohon kelapa, menawarkan kolam renang besar dan pemandangan laut
+                yang memukau.
+              address: Jalan Pantai Tropis No.88
+              city: Bali
+              country: Indonesia
+              type: HOTEL
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/properties/property/bc71a4cd-ea30-407e-b2ef-04ea916aa367/delete:
+    delete:
+      summary: Update Property Copy
+      deprecated: false
+      description: ""
+      tags:
+        - Property
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/rooms/add:
+    post:
+      summary: Add Room
+      deprecated: false
+      description: ""
+      tags:
+        - Room
+      parameters:
+        - name: propertyId
+          in: query
+          description: ""
+          required: true
+          example: 301ffd32-250f-4f21-a238-50759a5b8fc2
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomName:
+                  type: string
+                description:
+                  type: string
+                maxGuest:
+                  type: integer
+                pricePerNight:
+                  type: integer
+                bedType:
+                  type: string
+                unitAvailable:
+                  type: integer
+                roomSize:
+                  type: number
+                amenityIds:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - roomName
+                - description
+                - maxGuest
+                - pricePerNight
+                - bedType
+                - unitAvailable
+                - roomSize
+                - amenityIds
+            example:
+              roomName: Ocean View King Room
+              description: >-
+                Kamar luas bergaya tropis modern yang dilengkapi tempat tidur
+                king-size, balkon pribadi dengan pemandangan laut, interior
+                bernuansa hangat, kamar mandi mewah dengan bathtub berdiri
+                bebas, serta fasilitas lengkap untuk kenyamanan maksimal.
+              maxGuest: 2
+              pricePerNight: 285
+              bedType: DOUBLE
+              unitAvailable: 12
+              roomSize: 48.5
+              amenityIds:
+                - 39a6512f-b77b-45e0-97be-766451db259b
+                - 3e0de427-2868-4dc6-b4d3-89e9eef3ab14
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/rooms/room/d4a53bee-0f09-4196-967b-f231ef95143c/room:
+    get:
+      summary: Get Room by Id
+      deprecated: false
+      description: ""
+      tags:
+        - Room
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+  /api/v1/rooms/property/{propertyId}:
+    get:
+      summary: Get By Property Id
+      deprecated: false
+      description: ""
+      tags:
+        - Room
+      parameters:
+        - name: propertyId
+          in: path
+          description: ""
+          required: true
+          example: 2818191e-f73a-45c0-875d-f365583f7fe9
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+  /api/v1/rooms/update/room/d4a53bee-0f09-4196-967b-f231ef95143c:
+    put:
+      summary: Update Room
+      deprecated: false
+      description: ""
+      tags:
+        - Room
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomName:
+                  type: string
+                description:
+                  type: string
+                maxGuest:
+                  type: integer
+                pricePerNight:
+                  type: integer
+                bedType:
+                  type: string
+                unitAvailable:
+                  type: integer
+                roomSize:
+                  type: number
+                amenityIds:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - roomName
+                - description
+                - maxGuest
+                - pricePerNight
+                - bedType
+                - unitAvailable
+                - roomSize
+                - amenityIds
+            example:
+              roomName: Ocean View King Room
+              description: >-
+                Kamar luas bergaya tropis modern yang dilengkapi tempat tidur
+                king-size, balkon pribadi dengan pemandangan laut, interior
+                bernuansa hangat, kamar mandi mewah dengan bathtub berdiri
+                bebas, serta fasilitas lengkap untuk kenyamanan maksimal.
+              maxGuest: 2
+              pricePerNight: 500000
+              bedType: DOUBLE
+              unitAvailable: 12
+              roomSize: 48.5
+              amenityIds:
+                - 8d29ecf1-eccf-4b21-af86-1e8e10e69c40
+                - b4b22d3e-9199-4860-9928-c2189a418056
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/rooms/delete/room/d4a53bee-0f09-4196-967b-f231ef95143c:
+    delete:
+      summary: Delete Room
+      deprecated: false
+      description: ""
+      tags:
+        - Room
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/bookings/add:
+    post:
+      summary: Add Booking
+      deprecated: false
+      description: ""
+      tags:
+        - Booking
+      parameters:
+        - name: roomId
+          in: query
+          description: ""
+          required: false
+          example: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomCount:
+                  type: integer
+                nightCount:
+                  type: integer
+                checkInDate:
+                  type: string
+                  format: date
+                checkOutDate:
+                  type: string
+                  format: date
+                guestCount:
+                  type: integer
+                guestName:
+                  type: string
+              required:
+                - roomCount
+                - nightCount
+                - checkInDate
+                - checkOutDate
+                - guestCount
+                - guestName
+            example:
+              roomCount: 1
+              nightCount: 2
+              checkInDate: "2025-08-13"
+              checkOutDate: "2025-08-14"
+              isForMe: true
+              guestCount: 2
+              guestName: Joni
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  id: 58567281-190a-4c0c-a91e-b82097201675
+                  room:
+                    id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                    roomName: Room 1
+                    description: Room 1 Description
+                    maxGuest: 2
+                    pricePerNight: 500000
+                    bedType1: DOUBLE
+                    bedType2: null
+                    bedType3: null
+                    unitAvailable: 5
+                    roomSize: 30
+                    images: []
+                    amenities:
+                      - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                        category: category 0
+                        name: amenity 0
+                      - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                        category: category 1
+                        name: amenity 1
+                  roomCount: 1
+                  nightCount: 2
+                  checkInDate: "2025-08-16"
+                  checkOutDate: null
+                  isForMe: true
+                  guestCount: 2
+                  guestName: Joni
+                  totalAmount: 1000000
+                  status: INITIATED
+                  payment: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/bookings/user/bookings:
+    get:
+      summary: Get User Bookings
+      deprecated: false
+      description: ""
+      tags:
+        - Booking
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        room:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            roomName:
+                              type: string
+                            description:
+                              type: string
+                            maxGuest:
+                              type: integer
+                            pricePerNight:
+                              type: integer
+                            bedType1:
+                              type: string
+                            bedType2:
+                              type: "null"
+                            bedType3:
+                              type: "null"
+                            unitAvailable:
+                              type: integer
+                            roomSize:
+                              type: integer
+                            images:
+                              type: array
+                              items:
+                                type: string
+                            amenities:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  category:
+                                    type: string
+                                  name:
+                                    type: string
+                                required:
+                                  - id
+                                  - category
+                                  - name
+                          required:
+                            - id
+                            - roomName
+                            - description
+                            - maxGuest
+                            - pricePerNight
+                            - bedType1
+                            - bedType2
+                            - bedType3
+                            - unitAvailable
+                            - roomSize
+                            - images
+                            - amenities
+                        roomCount:
+                          type: integer
+                        nightCount:
+                          type: integer
+                        checkInDate:
+                          type: string
+                        checkOutDate:
+                          type:
+                            - string
+                            - "null"
+                        isForMe:
+                          type: boolean
+                        guestCount:
+                          type: integer
+                        guestName:
+                          type: string
+                        totalAmount:
+                          type: integer
+                        status:
+                          type: string
+                        payment:
+                          type: "null"
+                      required:
+                        - id
+                        - room
+                        - roomCount
+                        - nightCount
+                        - checkInDate
+                        - checkOutDate
+                        - isForMe
+                        - guestCount
+                        - guestName
+                        - totalAmount
+                        - status
+                        - payment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: 58567281-190a-4c0c-a91e-b82097201675
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 2
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: 89099fe9-8e1e-45a8-bc5d-51891ce70f78
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 2
+                    checkInDate: "2025-08-14"
+                    checkOutDate: "2025-08-16"
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: 926f84df-5aa5-4ff4-bc2a-94476413848a
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-14"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: bc68497e-e8fa-4b11-853f-bd63c1347e9d
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: e5cc769a-c1d0-4057-8c86-8900233f1a73
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/bookings/booking/{bookingId}:
+    get:
+      summary: Get Booking By Id
+      deprecated: false
+      description: ""
+      tags:
+        - Booking
+      parameters:
+        - name: bookingId
+          in: path
+          description: ""
+          required: true
+          example: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      room:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          roomName:
+                            type: string
+                          description:
+                            type: string
+                          maxGuest:
+                            type: integer
+                          pricePerNight:
+                            type: integer
+                          bedType1:
+                            type: string
+                          bedType2:
+                            type: "null"
+                          bedType3:
+                            type: "null"
+                          unitAvailable:
+                            type: integer
+                          roomSize:
+                            type: integer
+                          images:
+                            type: array
+                            items:
+                              type: string
+                          amenities:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                category:
+                                  type: string
+                                name:
+                                  type: string
+                              required:
+                                - id
+                                - category
+                                - name
+                        required:
+                          - id
+                          - roomName
+                          - description
+                          - maxGuest
+                          - pricePerNight
+                          - bedType1
+                          - bedType2
+                          - bedType3
+                          - unitAvailable
+                          - roomSize
+                          - images
+                          - amenities
+                      roomCount:
+                        type: integer
+                      nightCount:
+                        type: integer
+                      checkInDate:
+                        type: string
+                      checkOutDate:
+                        type: "null"
+                      isForMe:
+                        type: boolean
+                      guestCount:
+                        type: integer
+                      guestName:
+                        type: string
+                      totalAmount:
+                        type: integer
+                      status:
+                        type: string
+                      payment:
+                        type: "null"
+                    required:
+                      - id
+                      - room
+                      - roomCount
+                      - nightCount
+                      - checkInDate
+                      - checkOutDate
+                      - isForMe
+                      - guestCount
+                      - guestName
+                      - totalAmount
+                      - status
+                      - payment
+                required:
+                  - message
+                  - data
+              examples:
+                "1":
+                  summary: Success
+                  value:
+                    message: Success
+                    data:
+                      - id: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+                        room:
+                          id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                          roomName: Room 1
+                          description: Room 1 Description
+                          maxGuest: 2
+                          pricePerNight: 500000
+                          bedType1: DOUBLE
+                          bedType2: null
+                          bedType3: null
+                          unitAvailable: 4
+                          roomSize: 30
+                          images: []
+                          amenities:
+                            - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                              category: category 0
+                              name: amenity 0
+                            - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                              category: category 1
+                              name: amenity 1
+                        roomCount: 1
+                        nightCount: 0
+                        checkInDate: "2025-08-16"
+                        checkOutDate: null
+                        isForMe: true
+                        guestCount: 2
+                        guestName: Joni
+                        totalAmount: 1000000
+                        status: INITIATED
+                        payment: null
+                      - id: 58567281-190a-4c0c-a91e-b82097201675
+                        room:
+                          id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                          roomName: Room 1
+                          description: Room 1 Description
+                          maxGuest: 2
+                          pricePerNight: 500000
+                          bedType1: DOUBLE
+                          bedType2: null
+                          bedType3: null
+                          unitAvailable: 4
+                          roomSize: 30
+                          images: []
+                          amenities:
+                            - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                              category: category 0
+                              name: amenity 0
+                            - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                              category: category 1
+                              name: amenity 1
+                        roomCount: 1
+                        nightCount: 2
+                        checkInDate: "2025-08-16"
+                        checkOutDate: null
+                        isForMe: true
+                        guestCount: 2
+                        guestName: Joni
+                        totalAmount: 1000000
+                        status: INITIATED
+                        payment: null
+                      - id: 89099fe9-8e1e-45a8-bc5d-51891ce70f78
+                        room:
+                          id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                          roomName: Room 1
+                          description: Room 1 Description
+                          maxGuest: 2
+                          pricePerNight: 500000
+                          bedType1: DOUBLE
+                          bedType2: null
+                          bedType3: null
+                          unitAvailable: 4
+                          roomSize: 30
+                          images: []
+                          amenities:
+                            - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                              category: category 0
+                              name: amenity 0
+                            - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                              category: category 1
+                              name: amenity 1
+                        roomCount: 1
+                        nightCount: 2
+                        checkInDate: "2025-08-14"
+                        checkOutDate: "2025-08-16"
+                        isForMe: true
+                        guestCount: 2
+                        guestName: Joni
+                        totalAmount: 1000000
+                        status: INITIATED
+                        payment: null
+                      - id: 926f84df-5aa5-4ff4-bc2a-94476413848a
+                        room:
+                          id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                          roomName: Room 1
+                          description: Room 1 Description
+                          maxGuest: 2
+                          pricePerNight: 500000
+                          bedType1: DOUBLE
+                          bedType2: null
+                          bedType3: null
+                          unitAvailable: 4
+                          roomSize: 30
+                          images: []
+                          amenities:
+                            - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                              category: category 0
+                              name: amenity 0
+                            - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                              category: category 1
+                              name: amenity 1
+                        roomCount: 1
+                        nightCount: 0
+                        checkInDate: "2025-08-14"
+                        checkOutDate: null
+                        isForMe: true
+                        guestCount: 2
+                        guestName: Joni
+                        totalAmount: 1000000
+                        status: INITIATED
+                        payment: null
+                      - id: bc68497e-e8fa-4b11-853f-bd63c1347e9d
+                        room:
+                          id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                          roomName: Room 1
+                          description: Room 1 Description
+                          maxGuest: 2
+                          pricePerNight: 500000
+                          bedType1: DOUBLE
+                          bedType2: null
+                          bedType3: null
+                          unitAvailable: 4
+                          roomSize: 30
+                          images: []
+                          amenities:
+                            - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                              category: category 0
+                              name: amenity 0
+                            - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                              category: category 1
+                              name: amenity 1
+                        roomCount: 1
+                        nightCount: 0
+                        checkInDate: "2025-08-16"
+                        checkOutDate: null
+                        isForMe: true
+                        guestCount: 2
+                        guestName: Joni
+                        totalAmount: 1000000
+                        status: INITIATED
+                        payment: null
+                      - id: e5cc769a-c1d0-4057-8c86-8900233f1a73
+                        room:
+                          id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                          roomName: Room 1
+                          description: Room 1 Description
+                          maxGuest: 2
+                          pricePerNight: 500000
+                          bedType1: DOUBLE
+                          bedType2: null
+                          bedType3: null
+                          unitAvailable: 4
+                          roomSize: 30
+                          images: []
+                          amenities:
+                            - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                              category: category 0
+                              name: amenity 0
+                            - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                              category: category 1
+                              name: amenity 1
+                        roomCount: 1
+                        nightCount: 0
+                        checkInDate: "2025-08-16"
+                        checkOutDate: null
+                        isForMe: true
+                        guestCount: 2
+                        guestName: Joni
+                        totalAmount: 1000000
+                        status: INITIATED
+                        payment: null
+                "2":
+                  summary: Success
+                  value:
+                    message: Success
+                    data:
+                      id: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+                      room:
+                        id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                        roomName: Room 1
+                        description: Room 1 Description
+                        maxGuest: 2
+                        pricePerNight: 500000
+                        bedType1: DOUBLE
+                        bedType2: null
+                        bedType3: null
+                        unitAvailable: 4
+                        roomSize: 30
+                        images: []
+                        amenities:
+                          - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                            category: category 0
+                            name: amenity 0
+                          - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                            category: category 1
+                            name: amenity 1
+                      roomCount: 1
+                      nightCount: 0
+                      checkInDate: "2025-08-16"
+                      checkOutDate: null
+                      isForMe: true
+                      guestCount: 2
+                      guestName: Joni
+                      totalAmount: 1000000
+                      status: INITIATED
+                      payment: null
+                "5":
+                  summary: Success
+                  value:
+                    message: Success
+                    data:
+                      id: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+                      room:
+                        id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                        roomName: Room 1
+                        description: Room 1 Description
+                        maxGuest: 2
+                        pricePerNight: 500000
+                        bedType1: DOUBLE
+                        bedType2: null
+                        bedType3: null
+                        unitAvailable: 4
+                        roomSize: 30
+                        images: []
+                        amenities:
+                          - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                            category: category 0
+                            name: amenity 0
+                          - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                            category: category 1
+                            name: amenity 1
+                      roomCount: 1
+                      nightCount: 0
+                      checkInDate: "2025-08-16"
+                      checkOutDate: null
+                      isForMe: true
+                      guestCount: 2
+                      guestName: Joni
+                      totalAmount: 1000000
+                      status: INITIATED
+                      payment: null
+          headers: {}
+        "403":
+          description: The booking does not belonged to the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: You are not authorized
+                data: null
+          headers: {}
+        x-403:Forbidden:
+          description: The booking is not for the owner's room
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: You are not authorized
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/bookings/room/{roomId}:
+    get:
+      summary: Get Booking by Room
+      deprecated: false
+      description: ""
+      tags:
+        - Booking
+      parameters:
+        - name: roomId
+          in: path
+          description: ""
+          required: true
+          example: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        room:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            roomName:
+                              type: string
+                            description:
+                              type: string
+                            maxGuest:
+                              type: integer
+                            pricePerNight:
+                              type: integer
+                            bedType1:
+                              type: string
+                            bedType2:
+                              type: "null"
+                            bedType3:
+                              type: "null"
+                            unitAvailable:
+                              type: integer
+                            roomSize:
+                              type: integer
+                            images:
+                              type: array
+                              items:
+                                type: string
+                            amenities:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  category:
+                                    type: string
+                                  name:
+                                    type: string
+                                required:
+                                  - id
+                                  - category
+                                  - name
+                          required:
+                            - id
+                            - roomName
+                            - description
+                            - maxGuest
+                            - pricePerNight
+                            - bedType1
+                            - bedType2
+                            - bedType3
+                            - unitAvailable
+                            - roomSize
+                            - images
+                            - amenities
+                        roomCount:
+                          type: integer
+                        nightCount:
+                          type: integer
+                        checkInDate:
+                          type: string
+                        checkOutDate:
+                          type:
+                            - string
+                            - "null"
+                        isForMe:
+                          type: boolean
+                        guestCount:
+                          type: integer
+                        guestName:
+                          type: string
+                        totalAmount:
+                          type: integer
+                        status:
+                          type: string
+                        payment:
+                          type: "null"
+                      required:
+                        - id
+                        - room
+                        - roomCount
+                        - nightCount
+                        - checkInDate
+                        - checkOutDate
+                        - isForMe
+                        - guestCount
+                        - guestName
+                        - totalAmount
+                        - status
+                        - payment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: 58567281-190a-4c0c-a91e-b82097201675
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 2
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: 89099fe9-8e1e-45a8-bc5d-51891ce70f78
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 2
+                    checkInDate: "2025-08-14"
+                    checkOutDate: "2025-08-16"
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: 926f84df-5aa5-4ff4-bc2a-94476413848a
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-14"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: bc68497e-e8fa-4b11-853f-bd63c1347e9d
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+                  - id: e5cc769a-c1d0-4057-8c86-8900233f1a73
+                    room:
+                      id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                      roomName: Room 1
+                      description: Room 1 Description
+                      maxGuest: 2
+                      pricePerNight: 500000
+                      bedType1: DOUBLE
+                      bedType2: null
+                      bedType3: null
+                      unitAvailable: 4
+                      roomSize: 30
+                      images: []
+                      amenities:
+                        - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                          category: category 0
+                          name: amenity 0
+                        - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                          category: category 1
+                          name: amenity 1
+                    roomCount: 1
+                    nightCount: 0
+                    checkInDate: "2025-08-16"
+                    checkOutDate: null
+                    isForMe: true
+                    guestCount: 2
+                    guestName: Joni
+                    totalAmount: 1000000
+                    status: INITIATED
+                    payment: null
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Booking not found!
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/bookings/update-status:
+    patch:
+      summary: Update Booking Status
+      deprecated: false
+      description: ""
+      tags:
+        - Booking
+      parameters:
+        - name: bookingStatus
+          in: query
+          description: ""
+          required: false
+          example: CHECKED_IN
+          schema:
+            type: string
+        - name: bookingId
+          in: query
+          description: ""
+          required: false
+          example: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      room:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          roomName:
+                            type: string
+                          description:
+                            type: string
+                          maxGuest:
+                            type: integer
+                          pricePerNight:
+                            type: integer
+                          bedType1:
+                            type: string
+                          bedType2:
+                            type: "null"
+                          bedType3:
+                            type: "null"
+                          unitAvailable:
+                            type: integer
+                          roomSize:
+                            type: integer
+                          images:
+                            type: array
+                            items:
+                              type: string
+                          amenities:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                category:
+                                  type: string
+                                name:
+                                  type: string
+                              required:
+                                - id
+                                - category
+                                - name
+                        required:
+                          - id
+                          - roomName
+                          - description
+                          - maxGuest
+                          - pricePerNight
+                          - bedType1
+                          - bedType2
+                          - bedType3
+                          - unitAvailable
+                          - roomSize
+                          - images
+                          - amenities
+                      roomCount:
+                        type: integer
+                      nightCount:
+                        type: integer
+                      checkInDate:
+                        type: string
+                      checkOutDate:
+                        type: "null"
+                      isForMe:
+                        type: boolean
+                      guestCount:
+                        type: integer
+                      guestName:
+                        type: string
+                      totalAmount:
+                        type: integer
+                      status:
+                        type: string
+                      payment:
+                        type: "null"
+                    required:
+                      - id
+                      - room
+                      - roomCount
+                      - nightCount
+                      - checkInDate
+                      - checkOutDate
+                      - isForMe
+                      - guestCount
+                      - guestName
+                      - totalAmount
+                      - status
+                      - payment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  id: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+                  room:
+                    id: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+                    roomName: Room 1
+                    description: Room 1 Description
+                    maxGuest: 2
+                    pricePerNight: 500000
+                    bedType1: DOUBLE
+                    bedType2: null
+                    bedType3: null
+                    unitAvailable: 4
+                    roomSize: 30
+                    images: []
+                    amenities:
+                      - id: 1c53bac7-7559-4bb0-9314-024f02d6585f
+                        category: category 0
+                        name: amenity 0
+                      - id: 261349ed-918c-4553-a77f-9e2e652e2706
+                        category: category 1
+                        name: amenity 1
+                  roomCount: 1
+                  nightCount: 0
+                  checkInDate: "2025-08-16"
+                  checkOutDate: null
+                  isForMe: true
+                  guestCount: 2
+                  guestName: Joni
+                  totalAmount: 1000000
+                  status: CHECKED_IN
+                  payment: null
+          headers: {}
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: You are not authorized
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/payments/add:
+    post:
+      summary: Add Payment
+      deprecated: false
+      description: ""
+      tags:
+        - Payment
+      parameters:
+        - name: bookingId
+          in: query
+          description: ""
+          required: false
+          example: 89099fe9-8e1e-45a8-bc5d-51891ce70f78
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                totalAmount:
+                  type: number
+                paymentMethod:
+                  type: string
+                  enum:
+                    - CREDIT_CARD
+                    - TRANSFER
+                    - VIRTUAL_ACCOUNT
+                    - E_WALLET
+                    - QRIS
+              required:
+                - totalAmount
+                - paymentMethod
+            example:
+              totalAmount: 1000000
+              paymentMethod: E_WALLET
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Payment"
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  id: 8a735034-5c77-44d1-988e-66794aafdf56
+                  totalAmount: 1000000
+                  paymentMethod: E_WALLET
+                  paymentUrl: https://www.paymentgateway.com/payment/example
+                  expiresAt: "2025-08-16T18:35:16.5788808"
+                  paymentReceipt: null
+                  status: UNPAID
+          headers: {}
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Total amount is incorrect
+                data: null
+          headers: {}
+        "403":
+          description: Throws an error if the booking not belonged to the logged user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: You do not have permission to access this resource.
+                data: null
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Booking not found
+                data: null
+          headers: {}
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Payment is already created
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/payments/:
+    get:
+      summary: Get All Payments
+      deprecated: false
+      description: "Role : Admin"
+      tags:
+        - Payment
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        totalAmount:
+                          type: integer
+                        paymentMethod:
+                          type: string
+                        paymentUrl:
+                          type: string
+                        expiresAt:
+                          type: string
+                        paymentReceipt:
+                          type: "null"
+                        status:
+                          type: string
+                      required:
+                        - id
+                        - totalAmount
+                        - paymentMethod
+                        - paymentUrl
+                        - expiresAt
+                        - paymentReceipt
+                        - status
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 032435a5-8771-4ee4-9f6a-473d07318943
+                    totalAmount: 1000000
+                    paymentMethod: E_WALLET
+                    paymentUrl: https://www.paymentgateway.com/payment/example
+                    expiresAt: "2025-08-16T18:48:50.062053"
+                    paymentReceipt: null
+                    status: UNPAID
+                  - id: 87f8ed9e-a29b-47e4-acc1-3bd6b48d73ee
+                    totalAmount: 1000000
+                    paymentMethod: E_WALLET
+                    paymentUrl: https://www.paymentgateway.com/payment/example
+                    expiresAt: "2025-08-16T18:53:29.568133"
+                    paymentReceipt: null
+                    status: UNPAID
+                  - id: 8a735034-5c77-44d1-988e-66794aafdf56
+                    totalAmount: 1000000
+                    paymentMethod: E_WALLET
+                    paymentUrl: https://www.paymentgateway.com/payment/example
+                    expiresAt: "2025-08-16T18:35:16.578881"
+                    paymentReceipt: null
+                    status: UNPAID
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/payments/room/{roomId}:
+    get:
+      summary: Get Payments by Room
+      deprecated: false
+      description: "Role : Admin"
+      tags:
+        - Payment
+      parameters:
+        - name: roomId
+          in: path
+          description: ""
+          required: true
+          example: 4914d63e-47e0-42cd-963e-ba92df07f6a2
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        totalAmount:
+                          type: integer
+                        paymentMethod:
+                          type: string
+                        paymentUrl:
+                          type: string
+                        expiresAt:
+                          type: string
+                        paymentReceipt:
+                          type: "null"
+                        status:
+                          type: string
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 032435a5-8771-4ee4-9f6a-473d07318943
+                    totalAmount: 1000000
+                    paymentMethod: E_WALLET
+                    paymentUrl: https://www.paymentgateway.com/payment/example
+                    expiresAt: "2025-08-16T18:48:50.062053"
+                    paymentReceipt: null
+                    status: UNPAID
+                  - id: 87f8ed9e-a29b-47e4-acc1-3bd6b48d73ee
+                    totalAmount: 1000000
+                    paymentMethod: E_WALLET
+                    paymentUrl: https://www.paymentgateway.com/payment/example
+                    expiresAt: "2025-08-16T18:53:29.568133"
+                    paymentReceipt: null
+                    status: UNPAID
+                  - id: 8a735034-5c77-44d1-988e-66794aafdf56
+                    totalAmount: 1000000
+                    paymentMethod: E_WALLET
+                    paymentUrl: https://www.paymentgateway.com/payment/example
+                    expiresAt: "2025-08-16T18:35:16.578881"
+                    paymentReceipt: null
+                    status: UNPAID
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Payment not found
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/payments/update-status:
+    patch:
+      summary: Update Payment Status
+      deprecated: false
+      description: ""
+      tags:
+        - Payment
+      parameters:
+        - name: paymentId
+          in: query
+          description: ""
+          required: false
+          example: 54e74ad8-1261-4ebe-afd7-76567439bbe3
+          schema:
+            type: string
+            format: uuid
+        - name: paymentStatus
+          in: query
+          description: ""
+          required: false
+          example: EXPIRED
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactionId:
+                  type: string
+                amount:
+                  type: number
+                paidAt:
+                  type: string
+                  format: date-time
+              required:
+                - transactionId
+                - amount
+                - paidAt
+            example:
+              transactionId: testingtransactionid
+              amount: 1000000
+              paidAt: "2025-08-16T15:46:51.123Z"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Request cannot be null
+                data: null
+          headers: {}
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Payment status cannot be changed anymore
+                data: null
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Payment Not Found
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/wishlists/add:
+    post:
+      summary: Add Wishlist
+      deprecated: false
+      description: "Role : User"
+      tags:
+        - Wishlist
+      parameters:
+        - name: propertyId
+          in: query
+          description: ""
+          required: false
+          example: 2818191e-f73a-45c0-875d-f365583f7fe9
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data: null
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Property not found
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/wishlists/user/me/wishlists:
+    get:
+      summary: Get User Wishlists
+      deprecated: false
+      description: ""
+      tags:
+        - Wishlist
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 2818191e-f73a-45c0-875d-f365583f7fe9
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Wishlist is empty
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/wishlists/delete:
+    delete:
+      summary: Delete Wishlists
+      deprecated: false
+      description: ""
+      tags:
+        - Wishlist
+      parameters:
+        - name: propertyId
+          in: query
+          description: ""
+          required: false
+          example: 2818191e-f73a-45c0-875d-f365583f7fe9
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data: null
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Property not found
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/reviews/add:
+    post:
+      summary: Add Review
+      deprecated: false
+      description: ""
+      tags:
+        - Review
+      parameters:
+        - name: bookingId
+          in: query
+          description: ""
+          required: false
+          example: 2fa40fae-2980-4b7f-9088-4a6949ffba08
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                comment:
+                  type: string
+              required:
+                - rating
+                - comment
+            example:
+              rating: 5
+              comment: exellent
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Booking not found.
+                data: null
+          headers: {}
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      propertyId:
+                        type: string
+                      rating:
+                        type: integer
+                      comment:
+                        type: string
+                    required:
+                      - id
+                      - propertyId
+                      - rating
+                      - comment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  id: 0adf5ebf-679e-4c24-94f3-7aa7fadb87b2
+                  propertyId: 2818191e-f73a-45c0-875d-f365583f7fe9
+                  rating: 5
+                  comment: exellent
+          headers: {}
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: You do not have permission to access this resource.
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/reviews/review/{reviewId}:
+    get:
+      summary: Get review by id
+      deprecated: false
+      description: ""
+      tags:
+        - Review
+      parameters:
+        - name: reviewId
+          in: path
+          description: ""
+          required: true
+          example: 332bee46-d8de-42d8-835f-ed926839405a
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      propertyId:
+                        type: string
+                      rating:
+                        type: integer
+                      comment:
+                        type: string
+                    required:
+                      - id
+                      - propertyId
+                      - rating
+                      - comment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  id: 332bee46-d8de-42d8-835f-ed926839405a
+                  propertyId: 2818191e-f73a-45c0-875d-f365583f7fe9
+                  rating: 4
+                  comment: exellent
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Review not found
+                data: null
+          headers: {}
+      security: []
+  /api/v1/reviews/user/me/reviews:
+    get:
+      summary: Get user review
+      deprecated: false
+      description: ""
+      tags:
+        - Review
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        propertyId:
+                          type: string
+                        rating:
+                          type: integer
+                        comment:
+                          type: string
+                      required:
+                        - id
+                        - propertyId
+                        - rating
+                        - comment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 0adf5ebf-679e-4c24-94f3-7aa7fadb87b2
+                    propertyId: 2818191e-f73a-45c0-875d-f365583f7fe9
+                    rating: 5
+                    comment: exellent
+                  - id: 332bee46-d8de-42d8-835f-ed926839405a
+                    propertyId: 2818191e-f73a-45c0-875d-f365583f7fe9
+                    rating: 4
+                    comment: exellent
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Review not found
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+  /api/v1/reviews/property/{propertyId}:
+    get:
+      summary: Get review by property
+      deprecated: false
+      description: ""
+      tags:
+        - Review
+      parameters:
+        - name: propertyId
+          in: path
+          description: ""
+          required: true
+          example: 2818191e-f73a-45c0-875d-f365583f7fe9
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        propertyId:
+                          type: string
+                        rating:
+                          type: integer
+                        comment:
+                          type: string
+                      required:
+                        - id
+                        - propertyId
+                        - rating
+                        - comment
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data:
+                  - id: 0adf5ebf-679e-4c24-94f3-7aa7fadb87b2
+                    propertyId: 2818191e-f73a-45c0-875d-f365583f7fe9
+                    rating: 5
+                    comment: exellent
+                  - id: 332bee46-d8de-42d8-835f-ed926839405a
+                    propertyId: 2818191e-f73a-45c0-875d-f365583f7fe9
+                    rating: 4
+                    comment: exellent
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Review not found
+                data: null
+          headers: {}
+      security: []
+  /api/v1/reviews/delete:
+    delete:
+      summary: Delete Review
+      deprecated: false
+      description: ""
+      tags:
+        - Review
+      parameters:
+        - name: reviewId
+          in: query
+          description: ""
+          required: false
+          example: 0adf5ebf-679e-4c24-94f3-7aa7fadb87b2
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Success
+                data: null
+          headers: {}
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                title: ""
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: "null"
+                required:
+                  - message
+                  - data
+              example:
+                message: Review not found
+                data: null
+          headers: {}
+      security:
+        - bearer: []
+webhooks: {}
+components:
+  schemas:
+    Amenity:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID
+          format: uuid
+        category:
+          type: string
+          description: group
+        name:
+          type: string
+          description: name
+        room_id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - category
+        - name
+        - createdAt
+        - updatedAt
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        room_id:
+          type: string
+          format: uuid
+        roomCount:
+          type: integer
+        nightCount:
+          type: integer
+        checkInDate:
+          type: string
+          format: date-time
+        checkOutDate:
+          type: string
+          format: date-time
+        isForMe:
+          type: boolean
+        guestCount:
+          type: integer
+        guestName:
+          type: string
+        totalAmount:
+          type: number
+        status:
+          type: string
+          enum:
+            - INITIATED
+            - AWAITING_PAYMENT
+            - PAYMENT_RECEIVED
+            - CANCELLED
+            - CHECKED_IN
+            - COMPLETED
+            - EXPIRED
+        payment_id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - room_id
+        - roomCount
+        - nightCount
+        - checkInDate
+        - checkOutDate
+        - isForMe
+        - guestCount
+        - guestName
+        - totalAmount
+        - status
+        - createdAt
+        - updatedAt
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        property_id:
+          type: string
+          format: uu
+        room_id:
+          type: string
+          format: uuid
+        filePublicId:
+          type: string
+        fileName:
+          type: string
+        imageUrl:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - property_id
+        - room_id
+        - filePublicId
+        - fileName
+        - imageUrl
+        - createdAt
+        - updatedAt
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        booking_id:
+          type: string
+          format: uuid
+        totalAmount:
+          type: number
+        paymentMethod:
+          type: string
+          enum:
+            - CREDIT_CARD
+            - TRANSFER
+            - VIRTUAL_ACCOUNT
+            - E_WALLET
+            - QRIS
+        paymentUrl:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        payment_receipt_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - UNPAID
+            - PAID
+            - EXPIRED
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - booking_id
+        - totalAmount
+        - paymentMethod
+        - paymentUrl
+        - expiresAt
+        - status
+        - createdAt
+        - updatedAt
+    Payment Receipt:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        payment_id:
+          type: string
+          format: uuid
+        transactionId:
+          type: string
+        amount:
+          type: number
+        paidAt:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - payment_id
+        - transactionId
+        - amount
+        - paidAt
+        - createdAt
+        - updatedAt
+    Property:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        type:
+          type: string
+          enum:
+            - HOTEL
+            - APARTMENT
+            - HOUSE
+            - VILLA
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - name
+        - description
+        - address
+        - city
+        - country
+        - type
+        - createdAt
+        - updatedAt
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        property_id:
+          type: string
+          format: uuid
+        rating:
+          type: integer
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - property_id
+        - comment
+        - rating
+        - createdAt
+        - updatedAt
+    Room:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID
+          format: uuid
+        property_id:
+          type: string
+          format: uuid
+        roomName:
+          type: string
+        description:
+          type: string
+        maxGuest:
+          type: integer
+        pricePerNight:
+          type: number
+        bedType1:
+          type: string
+          enum:
+            - SINGLE
+            - DOUBLE
+            - TWIN
+        bedType2:
+          type: string
+          enum:
+            - SINGLE
+            - DOUBLE
+            - TWIN
+        bedType3:
+          type: string
+          enum:
+            - SINGLE
+            - DOUBLE
+            - TWIN
+        unitAvailable:
+          type: integer
+        roomSize:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - property_id
+        - roomName
+        - description
+        - maxGuest
+        - pricePerNight
+        - bedType1
+        - unitAvailable
+        - roomSize
+        - createdAt
+        - updatedAt
+    Room_Amenities:
+      type: object
+      properties:
+        amenity_id:
+          type: string
+          format: uuid
+        room_id:
+          type: string
+          format: uuid
+      required:
+        - amenity_id
+        - room_id
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        password:
+          type: string
+        phone_number:
+          type: string
+        role:
+          type: string
+          enum:
+            - ROLE_USER
+            - ROLE_OWNER
+            - ROLE_ADMIN
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - first_name
+        - last_name
+        - password
+        - role
+        - createdAt
+        - updatedAt
+    Wishlist:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        property_id:
+          type: string
+          format: uuid
+      required:
+        - user_id
+        - property_id
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+servers:
+  - url: "http://localhost:9193"
+    description: Develop Env
+security: []
